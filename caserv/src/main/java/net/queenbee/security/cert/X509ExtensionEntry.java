@@ -119,7 +119,7 @@ implements Serializable
 		this.critical = critical;
 	}
 	
-	/*
+	/**
 	 * String representation.
 	 */
 	@Override
@@ -132,7 +132,7 @@ implements Serializable
 		return sb.toString();
 	}
 	
-	/*
+	/**
 	 * Hash by OID.
 	 */
 	@Override
@@ -141,7 +141,7 @@ implements Serializable
 		return oid == null ? 0 : oid.hashCode();
 	}
 	
-	/*
+	/**
 	 * Equality by OID.
 	 */
 	@Override
