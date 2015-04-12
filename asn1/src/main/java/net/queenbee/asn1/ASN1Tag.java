@@ -30,9 +30,149 @@ implements Serializable
 	private static final long serialVersionUID = -630147763738254334L;
 	
 	/**
-	 * Universal tag number for End-Of-Content.
+	 * Universal tag number for EOC.
 	 */
 	public static final int TN_EOC = 0;
+	
+	/**
+	 * Universal tag number for BOOLEAN type.
+	 */
+	public static final int TN_BOOLEAN = 1;
+	
+	/**
+	 * Universal tag number for INTEGER type.
+	 */
+	public static final int TN_INTEGER = 2;
+	
+	/**
+	 * Universal tag number for BIT STRING type.
+	 */
+	public static final int TN_BIT_STRING = 3;
+	
+	/**
+	 * Universal tag number for OCTET STRING type.
+	 */
+	public static final int TN_OCTET_STRING = 4;
+	
+	/**
+	 * Universal tag number for NULL type.
+	 */
+	public static final int TN_NULL = 5;
+	
+	/**
+	 * Universal tag number for OBJECT IDENTIFIER type.
+	 */
+	public static final int TN_OBJECT_INDENTIFIER = 6;
+	
+	/**
+	 * Universal tag number for Object Descriptor type.
+	 */
+	public static final int TN_OBJECT_DESCRIPTOR = 7;
+	
+	/**
+	 * Universal tag number for EXTERNAL type.
+	 */
+	public static final int TN_EXTERNAL = 8;
+	
+	/**
+	 * Universal tag number for REAL type.
+	 */
+	public static final int TN_REAL = 9;
+	
+	/**
+	 * Universal tag number for ENUMERATED type.
+	 */
+	public static final int TN_ENUMERATED = 10;
+	
+	/**
+	 * Universal tag number for EMBEDDED PDV type.
+	 */
+	public static final int TN_EMBEDDED_PDV = 11;
+	
+	/**
+	 * Universal tag number for UTF8String type.
+	 */
+	public static final int TN_UTF8_STRING = 12;
+	
+	/**
+	 * Universal tag number for RELATIVE-OID type.
+	 */
+	public static final int TN_RELATIVE_OID = 13;
+	
+	/**
+	 * Universal tag number for SEQUENCE and SEQUENCE OF types.
+	 */
+	public static final int TN_SEQUENCE = 16;
+	
+	/**
+	 * Universal tag number for SET and SET OF types.
+	 */
+	public static final int TN_SET = 17;
+	
+	/**
+	 * Universal tag number for NumericString type.
+	 */
+	public static final int TN_NUMERIC_STRING = 18;
+	
+	/**
+	 * Universal tag number for PrintableString type.
+	 */
+	public static final int TN_PRINTABLE_STRING = 19;
+	
+	/**
+	 * Universal tag number for T61String type.
+	 */
+	public static final int TN_T61_STRING = 20;
+	
+	/**
+	 * Universal tag number for VideotexString type.
+	 */
+	public static final int TN_VIDEOTEX_STRING = 21;
+	
+	/**
+	 * Universal tag number for IA5String type.
+	 */
+	public static final int TN_IA5_STRING = 22;
+	
+	/**
+	 * Universal tag number for UTCTime type.
+	 */
+	public static final int TN_UTC_TIME = 23;
+	
+	/**
+	 * Universal tag number for GeneralizedTime type.
+	 */
+	public static final int TN_GENERALIZED_TIME = 24;
+	
+	/**
+	 * Universal tag number for GraphicString type.
+	 */
+	public static final int TN_GRAPHIC_STRING = 25;
+	
+	/**
+	 * Universal tag number for VisibleString type.
+	 */
+	public static final int TN_VISIBLE_STRING = 26;
+	
+	/**
+	 * Universal tag number for GeneralString type.
+	 */
+	public static final int TN_GENERAL_STRING = 27;
+	
+	/**
+	 * Universal tag number for UniversalString type.
+	 */
+	public static final int TN_UNIVERSAL_STRING = 28;
+	
+	/**
+	 * Universal tag number for CHARACTER STRING type.
+	 */
+	public static final int TN_CHARACTER_STRING = 29;
+	
+	/**
+	 * Universal tag number for BMPString type.
+	 */
+	public static final int TN_BMP_STRING = 30;
 	
 	private ASN1Class tagClass;
 	private int tagNumber;

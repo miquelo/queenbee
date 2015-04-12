@@ -96,7 +96,7 @@ extends InputStream
 	}
 	
 	/**
-	 * Read universal integer as {@code BigInteger}.
+	 * Read universal integer.
 	 * 
 	 * @return
 	 * 			Integer value.
@@ -104,7 +104,7 @@ extends InputStream
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
 	 */
-	public BigInteger readBigInteger()
+	public BigInteger readInteger()
 	throws IOException
 	{
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream())
@@ -122,33 +122,35 @@ extends InputStream
 	}
 	
 	/**
-	 * Read universal integer as {@code long}.
+	 * Read universal bit string.
 	 * 
 	 * @return
-	 * 			Integer value.
+	 * 			Bit string value.
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
 	 */
-	public long readLong()
+	public boolean[] readBitString()
 	throws IOException
 	{
-		return readBigInteger().longValue();
+		// TODO ...
+		return null;
 	}
 	
 	/**
-	 * Read universal integer as {@code int}.
+	 * Read universal octet string.
 	 * 
 	 * @return
-	 * 			Integer value.
+	 * 			Octet string value.
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
 	 */
-	public int readInt()
+	public byte[] readOctetString()
 	throws IOException
 	{
-		return readBigInteger().intValue();
+		// TODO ..
+		return null;
 	}
 	
 	/**
@@ -180,6 +182,16 @@ extends InputStream
 		{
 			throw new IOException(exception);
 		}
+	}
+	
+	/**
+	 * Close the underlying input stream.
+	 */
+	@Override
+	public void close()
+	throws IOException
+	{
+		input.close();
 	}
 	
 	private static TagInput constructedReadTag(TagInput input, ASN1Tag tag)
