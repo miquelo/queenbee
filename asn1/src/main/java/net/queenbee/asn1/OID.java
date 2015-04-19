@@ -150,7 +150,10 @@ implements Serializable
 	@Override
 	public String toString()
 	{
-		// TODO ...
-		return null;
+		StringBuilder str = new StringBuilder();
+		str.append(subId[0]);
+		for (int i = 1; i < subId.length; ++i)
+			str.append('.').append(subId[i]);
+		return str.toString();
 	}
 }
