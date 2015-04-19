@@ -19,13 +19,16 @@ package net.queenbee.asn1.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.queenbee.asn1.ASN1Class;
 import net.queenbee.asn1.ASN1Tag;
+import net.queenbee.asn1.OID;
 
 /**
  * BER output stream.
@@ -159,6 +162,81 @@ extends OutputStream
 	 * 			If some input/output stream error has been occurred.
 	 */
 	public void writeOctetString(byte[] os)
+	throws IOException
+	{
+		// TODO ...
+	}
+	
+	/**
+	 * Write universal object identifier.
+	 * 
+	 * @param oid
+	 * 			Object identifier to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeObjectIdentifier(OID oid)
+	throws IOException
+	{
+		// TODO ...
+	}
+	
+	/**
+	 * Write universal real.
+	 * 
+	 * @param real
+	 * 			Real to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeReal(BigDecimal real)
+	throws IOException
+	{
+		// TODO ...
+	}
+	
+	/**
+	 * Write universal UTF-8 string.
+	 * 
+	 * @param str
+	 * 			UTF-8 string to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeUTF8String(String str)
+	throws IOException
+	{
+		// TODO ...
+	}
+	
+	/**
+	 * Write universal UTC time.
+	 * 
+	 * @param time
+	 * 			UTC time to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeUTCTime(Date time)
+	throws IOException
+	{
+		// TODO ...
+	}
+	
+	/**
+	 * Write universal generalized time.
+	 * 
+	 * @param time
+	 * 			UTC time to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeGeneralizedTime(Date time)
 	throws IOException
 	{
 		// TODO ...

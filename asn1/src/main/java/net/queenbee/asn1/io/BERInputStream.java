@@ -20,10 +20,13 @@ package net.queenbee.asn1.io;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 
 import net.queenbee.asn1.ASN1Class;
 import net.queenbee.asn1.ASN1Tag;
+import net.queenbee.asn1.OID;
 
 /**
  * BER input stream.
@@ -149,7 +152,95 @@ extends InputStream
 	public byte[] readOctetString()
 	throws IOException
 	{
-		// TODO ..
+		// TODO ...
+		return null;
+	}
+	
+	/**
+	 * Read universal object identifier.
+	 * 
+	 * @return
+	 * 			Object identifier value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
+	 */
+	public OID readObjectIdentifier()
+	throws IOException, BEREncodingException
+	{
+		// TODO ...
+		return null;
+	}
+	
+	/**
+	 * Read universal real.
+	 * 
+	 * @return
+	 * 			Real value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public BigDecimal readReal()
+	throws IOException
+	{
+		// TODO ...
+		return null;
+	}
+	
+	/**
+	 * Read universal UTF-8 string.
+	 * 
+	 * @return
+	 * 			UTF-8 string value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
+	 */
+	public String readUTF8String()
+	throws IOException, BEREncodingException
+	{
+		// TODO ...
+		return null;
+	}
+	
+	/**
+	 * Read universal UTC time.
+	 * 
+	 * @return
+	 * 			UTC time value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
+	 */
+	public Date readUTCTime()
+	throws IOException, BEREncodingException
+	{
+		// TODO ...
+		return null;
+	}
+	
+	/**
+	 * Read universal generalized time.
+	 * 
+	 * @return
+	 * 			Generalized time value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
+	 */
+	public Date readGeneralizedTime()
+	throws IOException, BEREncodingException
+	{
+		// TODO ...
 		return null;
 	}
 	
