@@ -18,6 +18,7 @@
 package net.queenbee.asn1;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * ASN.1 object identifier.
@@ -36,13 +37,16 @@ implements Serializable
 	 * 
 	 * @param id1
 	 * 			First sub-identifier.
+	 * @param id2
+	 * 			Second sub-identifier.
 	 * @param idn
 	 * 			Next sub-identifiers.
 	 */
-	public OID(int id1, int... idn)
+	public OID(int id1, int id2, int... idn)
 	{
-		subId = new int[1 + idn.length];
+		subId = new int[2 + idn.length];
 		subId[0] = id1;
+		subId[1] = id2;
 		for (int i = 1; i < idn.length; ++i)
 			subId[i + 1] = idn[i];
 	}
@@ -66,12 +70,10 @@ implements Serializable
 	 * 
 	 * @param base
 	 * 			Base OID.
-	 * @param id1
-	 * 			First sub-identifier.
 	 * @param idn
 	 * 			Next sub-identifiers.
 	 */
-	public OID(OID base, int id1, int... idn)
+	public OID(OID base, int... idn)
 	{
 		// TODO ...
 	}
@@ -138,8 +140,7 @@ implements Serializable
 		if (obj != null && obj instanceof OID)
 		{
 			OID oid = (OID) obj;
-			if (length() != oid.length())
-				return false;
+			return Arrays.equals(subId, oid.subId);
 		}
 		return false;
 	}
