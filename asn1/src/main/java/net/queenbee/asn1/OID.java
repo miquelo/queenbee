@@ -216,6 +216,33 @@ implements Serializable
 	}
 	
 	/**
+	 * Equality comparison until the given depth.
+	 * 
+	 * @param oid
+	 * 			Object identifier to be compared.
+	 * @param depth
+	 * 			Comparison depth from the first sub-identifier.
+	 * 
+	 * @return
+	 * 			{@code true} if, and only if two object identifiers have same
+	 * 			sub-identifiers until the given depth.
+	 */
+	public boolean equals(OID oid, int depth)
+	{
+		try
+		{
+			for (int i = 0; i < depth; ++i)
+				if (subId[i] != oid.subId[i])
+					return false;
+			return true;
+		}
+		catch (Exception exception)
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * String representation of this OID.
 	 */
 	@Override
