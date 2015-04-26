@@ -256,66 +256,6 @@ implements Serializable
 	}
 	
 	/**
-	 * Creates a CCITT object identifier.
-	 * 
-	 * @param id2
-	 * 			Second sub-identifier.
-	 * @param idn
-	 * 			Next sub-identifiers.
-	 * 
-	 * @return
-	 * 			The CCITT object identifier.
-	 * 
-	 * @throws IllegalArgumentException
-	 * 			If second sub-identifier is not valid.
-	 * 			
-	 */
-	public static OID newCCITT(int id2, int... idn)
-	{
-		return new OID(0, id2, idn);
-	}
-	
-	/**
-	 * Creates an ISO object identifier.
-	 * 
-	 * @param id2
-	 * 			Second sub-identifier.
-	 * @param idn
-	 * 			Next sub-identifiers.
-	 * 
-	 * @return
-	 * 			The ISO object identifier.
-	 * 
-	 * @throws IllegalArgumentException
-	 * 			If second sub-identifier is not valid.
-	 * 			
-	 */
-	public static OID newISO(int id2, int... idn)
-	{
-		return new OID(1, id2, idn);
-	}
-	
-	/**
-	 * Creates a Join-ISO-CCITT object identifier.
-	 * 
-	 * @param id2
-	 * 			Second sub-identifier.
-	 * @param idn
-	 * 			Next sub-identifiers.
-	 * 
-	 * @return
-	 * 			The Join-ISO-CCITT object identifier.
-	 * 
-	 * @throws IllegalArgumentException
-	 * 			If second sub-identifier is not valid.
-	 * 			
-	 */
-	public static OID newJOIN(int id2, int... idn)
-	{
-		return new OID(2, id2, idn);
-	}
-	
-	/**
 	 * Creates an OID from an string representation.
 	 * 
 	 * @param str
@@ -417,5 +357,65 @@ implements Serializable
 			msg.append("Invalid second OID sub-identifier: ").append(id2);
 			throw new IllegalArgumentException(msg.toString());
 		}
+	}
+	
+	/**
+	 * Creates a CCITT object identifier.
+	 * 
+	 * @param id2
+	 * 			Second sub-identifier.
+	 * @param idn
+	 * 			Next sub-identifiers.
+	 * 
+	 * @return
+	 * 			The CCITT object identifier.
+	 * 
+	 * @throws IllegalArgumentException
+	 * 			If second sub-identifier is not valid.
+	 * 			
+	 */
+	private static OID newCCITT(int id2, int... idn)
+	{
+		return new OID(0, id2, idn);
+	}
+	
+	/**
+	 * Creates an ISO object identifier.
+	 * 
+	 * @param id2
+	 * 			Second sub-identifier.
+	 * @param idn
+	 * 			Next sub-identifiers.
+	 * 
+	 * @return
+	 * 			The ISO object identifier.
+	 * 
+	 * @throws IllegalArgumentException
+	 * 			If second sub-identifier is not valid.
+	 * 			
+	 */
+	private static OID newISO(int id2, int... idn)
+	{
+		return new OID(1, id2, idn);
+	}
+	
+	/**
+	 * Creates a Join-ISO-CCITT object identifier.
+	 * 
+	 * @param id2
+	 * 			Second sub-identifier.
+	 * @param idn
+	 * 			Next sub-identifiers.
+	 * 
+	 * @return
+	 * 			The Join-ISO-CCITT object identifier.
+	 * 
+	 * @throws IllegalArgumentException
+	 * 			If second sub-identifier is not valid.
+	 * 			
+	 */
+	private static OID newJOIN(int id2, int... idn)
+	{
+		return new OID(2, id2, idn);
 	}
 }

@@ -20,9 +20,17 @@ package net.queenbee.asn1.io;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import net.queenbee.asn1.ASN1Class;
 import net.queenbee.asn1.ASN1Tag;
@@ -36,6 +44,17 @@ import net.queenbee.asn1.OID;
 public class BERInputStream
 extends InputStream
 {
+	private static DateFormat[] utcFmt;
+	
+	static
+	{
+		utcFmt = new DateFormat[4];
+		utcFmt[0] = new SimpleDateFormat("yyMMddHHmmz");
+		utcFmt[1] = new SimpleDateFormat("yyMMddHHmmZ");
+		utcFmt[2] = new SimpleDateFormat("yyMMddHHmmssz");
+		utcFmt[3] = new SimpleDateFormat("yyMMddHHmmssZ");
+	}
+	
 	private TagInput input;
 	
 	/**
@@ -76,26 +95,16 @@ extends InputStream
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
 	 */
 	public boolean readBoolean()
-	throws IOException
+	throws IOException, BEREncodingException
 	{
-		try
-		{
-			int i = read();
-			while (i >= 0)
-			{
-				if (i > 0)
-					return true;
-				i = read();
-			}
-			skip();
-			return false;
-		}
-		catch (BEREncodingException exception)
-		{
-			throw new IOException(exception);
-		}
+		int b = read();
+		if (b < 0)
+			throw new BEREncodingException("Empty boolean");
+		return b > 0;
 	}
 	
 	/**
@@ -106,9 +115,11 @@ extends InputStream
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
 	 */
 	public BigInteger readInteger()
-	throws IOException
+	throws IOException, BEREncodingException
 	{
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream())
 		{
@@ -120,6 +131,8 @@ extends InputStream
 				baos.write(buf, 0, len);
 				len = read(buf, 0, bufSize);
 			}
+			if (baos.size() == 0)
+				throw new BEREncodingException("Empty integer");
 			return new BigInteger(baos.toByteArray());
 		}
 	}
@@ -132,12 +145,32 @@ extends InputStream
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
+	 * @throws BEREncodingException
+	 * 			If some encoding error has been occurred.
 	 */
 	public boolean[] readBitString()
-	throws IOException
+	throws IOException, BEREncodingException
 	{
-		// TODO ...
-		return null;
+		int padding = read();
+		if (padding < 0)
+			throw new BEREncodingException("No padding octet available");
+		
+		List<Boolean> valueList = new ArrayList<>();
+		int b = read();
+		while (b >= 0)
+		{
+			for (int i = 0; i < 8; ++i)
+			{
+				valueList.add((b & 0x80) > 0);
+				b = b << 1;
+			}
+			b = read();
+		}
+		
+		boolean[] values = new boolean[valueList.size()];
+		for (int i = 0; i < values.length - padding; ++i)
+			values[i] = valueList.get(i);
+		return values;
 	}
 	
 	/**
@@ -152,8 +185,18 @@ extends InputStream
 	public byte[] readOctetString()
 	throws IOException
 	{
-		// TODO ...
-		return null;
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream())
+		{
+			int bufLen = 16;
+			byte[] buf = new byte[bufLen];
+			int len = read(buf, 0, bufLen);
+			while (len > 0)
+			{
+				baos.write(buf, 0, len);
+				len = read(buf, 0, bufLen);
+			}
+			return baos.toByteArray();
+		}
 	}
 	
 	/**
@@ -170,8 +213,38 @@ extends InputStream
 	public OID readObjectIdentifier()
 	throws IOException, BEREncodingException
 	{
-		// TODO ...
-		return null;
+		int b = read();
+		if (b < 0)
+			throw new BEREncodingException("Empty object identifier");
+		int id1 = b / 40;
+		int id2 = b % 40;
+		
+		List<Integer> idnList = new ArrayList<>();
+		boolean completed = false;
+		int idi = 0;
+		b = read();
+		while (b >= 0)
+		{
+			idi = idi | (b & 0x7f);
+			if ((b & 0x80) > 0)
+			{
+				idi = idi << 7;
+				completed = false;
+			}
+			else
+			{
+				idnList.add(idi);
+				idi = 0;
+				completed = true;
+			}
+		}
+		if (!completed)
+			throw new BEREncodingException("Incomplete object identifier");
+		
+		int[] idn = new int[idnList.size()];
+		for (int i = 0; i < idn.length; ++i)
+			idn[i] = idnList.get(i);
+		return new OID(id1, id2, idn);
 	}
 	
 	/**
@@ -186,8 +259,8 @@ extends InputStream
 	public BigDecimal readReal()
 	throws IOException
 	{
-		// TODO ...
-		return null;
+		// TODO Read BER universal real
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	/**
@@ -204,8 +277,17 @@ extends InputStream
 	public String readUTF8String()
 	throws IOException, BEREncodingException
 	{
-		// TODO ...
-		return null;
+		Reader reader = new InputStreamReader(this, StandardCharsets.UTF_8);
+		StringBuilder sb = new StringBuilder();
+		int bufLen = 32;
+		char[] buf = new char[bufLen];
+		int len = reader.read(buf, 0, bufLen);
+		while (len > 0)
+		{
+			sb.append(buf);
+			len = reader.read(buf, 0, bufLen);
+		}
+		return sb.toString();
 	}
 	
 	/**
@@ -222,8 +304,31 @@ extends InputStream
 	public Date readUTCTime()
 	throws IOException, BEREncodingException
 	{
-		// TODO ...
-		return null;
+		Reader reader = new InputStreamReader(this, StandardCharsets.US_ASCII);
+		StringBuilder sb = new StringBuilder();
+		int minLen = 10;
+		int maxLen = 17;
+		char[] minBuf = new char[minLen];
+		int len = reader.read(minBuf, 0, minLen);
+		if (len < minLen)
+			throw new BEREncodingException("Incomplete UTC time");
+		sb.append(minBuf);
+		
+		int c = reader.read();
+		while (c >= 0 && sb.length() < maxLen)
+		{
+			sb.append((char) c);
+			for (DateFormat df : utcFmt)
+				try
+				{
+					return df.parse(sb.toString());
+				}
+				catch (ParseException exception)
+				{
+				}
+			c = reader.read();
+		}
+		throw new BEREncodingException("Invalid UTC time");
 	}
 	
 	/**
@@ -240,8 +345,8 @@ extends InputStream
 	public Date readGeneralizedTime()
 	throws IOException, BEREncodingException
 	{
-		// TODO ...
-		return null;
+		// TODO Read BER universal generalized time
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	/**

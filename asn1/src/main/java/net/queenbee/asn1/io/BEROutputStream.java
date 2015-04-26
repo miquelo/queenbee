@@ -19,12 +19,18 @@ package net.queenbee.asn1.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 
 import net.queenbee.asn1.ASN1Class;
 import net.queenbee.asn1.ASN1Tag;
@@ -38,10 +44,17 @@ import net.queenbee.asn1.OID;
 public class BEROutputStream
 extends OutputStream
 {
+	private static DateFormat utcFmt;
+	
 	/**
 	 * Default buffer size used to allocate temporary contents.
 	 */
 	public static final int DEFAULT_BUFFER_SIZE = 4 * 1024;
+	
+	static
+	{
+		utcFmt = new SimpleDateFormat("yyMMddHHmmssZ");
+	}
 	
 	private TagOutput output;
 	private OutputStream out;
@@ -149,7 +162,26 @@ extends OutputStream
 	public void writeBitString(boolean[] bs)
 	throws IOException
 	{
-		// TODO ...
+		write((8 - bs.length % 8) % 8);
+		int off = 0;
+		int b = 0;
+		for (boolean v : bs)
+		{
+			b = b | (v ? 1 : 0);
+			if (off < 7)
+			{
+				++off;
+				b = b << 1;
+			}
+			else
+			{
+				write(b);
+				off = 0;
+				b = 0;
+			}
+		}
+		if (off < 7)
+			write(b << (7 - off));
 	}
 	
 	/**
@@ -164,7 +196,7 @@ extends OutputStream
 	public void writeOctetString(byte[] os)
 	throws IOException
 	{
-		// TODO ...
+		write(os);
 	}
 	
 	/**
@@ -179,7 +211,21 @@ extends OutputStream
 	public void writeObjectIdentifier(OID oid)
 	throws IOException
 	{
-		// TODO ...
+		write(oid.get(0) * 40 + oid.get(1));
+		for (int i = 2; i < oid.length(); ++i)
+		{
+			Stack<Integer> stack = new Stack<Integer>();
+			int idi = oid.get(i);
+			stack.push(idi & 0x7f);
+			idi = idi >>> 7;
+			while (idi > 0)
+			{
+				stack.push(idi & 0x7f);
+				idi = idi >>> 7;
+			}
+			while (!stack.isEmpty())
+				write(stack.pop() | (stack.isEmpty() ? 0x00 : 0x80));
+		}
 	}
 	
 	/**
@@ -194,7 +240,8 @@ extends OutputStream
 	public void writeReal(BigDecimal real)
 	throws IOException
 	{
-		// TODO ...
+		// TODO Write BER universal real
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	/**
@@ -209,7 +256,9 @@ extends OutputStream
 	public void writeUTF8String(String str)
 	throws IOException
 	{
-		// TODO ...
+		Writer writer = new OutputStreamWriter(this, StandardCharsets.UTF_8);
+		writer.write(str);
+		writer.flush();
 	}
 	
 	/**
@@ -224,7 +273,9 @@ extends OutputStream
 	public void writeUTCTime(Date time)
 	throws IOException
 	{
-		// TODO ...
+		Writer writer = new OutputStreamWriter(this, StandardCharsets.US_ASCII);
+		writer.write(utcFmt.format(time));
+		writer.flush();
 	}
 	
 	/**
@@ -239,7 +290,8 @@ extends OutputStream
 	public void writeGeneralizedTime(Date time)
 	throws IOException
 	{
-		// TODO ...
+		// TODO Write BER universal generalized time
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	/**
