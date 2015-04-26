@@ -18,7 +18,9 @@
 package net.queenbee.security.cert;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,7 @@ import net.queenbee.asn1.ASN1Tag;
 import net.queenbee.asn1.OID;
 import net.queenbee.asn1.io.BEREncodingException;
 import net.queenbee.asn1.io.BERInputStream;
+import net.queenbee.asn1.io.BEROutputStream;
 
 public class X509ExtensionEntries
 {
@@ -158,6 +161,24 @@ public class X509ExtensionEntries
 		}
 	}
 	
+	public static X509ExtensionEntry createBasicConstraints(int bc,
+			boolean critical)
+	{
+		return new BasicConstraints(bc, critical);
+	}
+	
+	public static X509ExtensionEntry createKeyUsage(boolean[] ku,
+			boolean critical)
+	{
+		return new KeyUsage(ku, critical);
+	}
+	
+	public static X509ExtensionEntry createExtendedKeyUsage(List<String> eku,
+			boolean critical)
+	{
+		return new ExtendedKeyUsage(eku, critical);
+	}
+	
 	private static X509ExtensionEntry findExtension(
 			Set<X509ExtensionEntry> extensions, OID oid)
 	{
@@ -172,5 +193,143 @@ public class X509ExtensionEntries
 	{
 		return new BERInputStream(new ByteArrayInputStream(
 				extension.getValue()));
+	}
+	
+	private static abstract class X509ExtensionEntryBase
+	extends X509ExtensionEntry
+	{
+		private static final long serialVersionUID = -4895179071991830029L;
+		
+		private byte[] value;
+		
+		protected X509ExtensionEntryBase(String oid, boolean critical)
+		{
+			super(oid, critical);
+			value = null;
+		}
+		
+		@Override
+		public byte[] getValue()
+		{
+			if (value == null)
+			{
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				try (BEROutputStream out = new BEROutputStream(baos))
+				{
+					encodeValue(out);
+				}
+				catch (IOException | BEREncodingException exception)
+				{
+					baos.reset();
+				}
+				finally
+				{
+					value = baos.toByteArray();
+				}
+			}
+			return value;
+		}
+		
+		protected abstract void encodeValue(BEROutputStream out)
+		throws IOException, BEREncodingException;
+	}
+	
+	private static class BasicConstraints
+	extends X509ExtensionEntryBase
+	{
+		private static final long serialVersionUID = -3377855886236162549L;
+		
+		private int bc;
+		
+		public BasicConstraints(int bc, boolean critical)
+		{
+			super(BASIC_CONSTRAINTS_OID.toString(), critical);
+			this.bc = bc;
+		}
+
+		@Override
+		protected void encodeValue(BEROutputStream out)
+		throws IOException, BEREncodingException
+		{
+			// Sequence
+			out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL, ASN1Tag.TN_SEQUENCE,
+					true));
+			
+			// CA
+			out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL, ASN1Tag.TN_BOOLEAN,
+					false));
+			out.writeBoolean(bc >= 0);
+			out.conclude(true);
+			
+			// Path length constraint
+			if (bc < Integer.MAX_VALUE)
+			{
+				out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL,
+						ASN1Tag.TN_INTEGER, false));
+				out.writeInteger(BigInteger.valueOf(bc));
+				out.conclude(true);
+			}
+			
+			out.conclude(true);
+		}
+	}
+	
+	private static class KeyUsage
+	extends X509ExtensionEntryBase
+	{
+		private static final long serialVersionUID = 4568156270883286101L;
+		
+		private boolean[] ku;
+		
+		public KeyUsage(boolean[] ku, boolean critical)
+		{
+			super(KEY_USAGE_OID.toString(), critical);
+			this.ku = ku;
+		}
+
+		@Override
+		protected void encodeValue(BEROutputStream out)
+		throws IOException, BEREncodingException
+		{
+			// Bit string
+			out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL, ASN1Tag.TN_BIT_STRING,
+					false));
+			out.writeBitString(ku);
+			out.conclude(true);
+		}
+	}
+	
+	private static class ExtendedKeyUsage
+	extends X509ExtensionEntryBase
+	{
+		private static final long serialVersionUID = 6197629796703703092L;
+		
+		private List<String> eku;
+		
+		public ExtendedKeyUsage(List<String> eku, boolean critical)
+		{
+			super(EXTENDED_KEY_USAGE_OID.toString(), critical);
+			this.eku = eku;
+		}
+
+		@Override
+		protected void encodeValue(BEROutputStream out)
+		throws IOException, BEREncodingException
+		{
+			// Sequence
+			out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL, ASN1Tag.TN_SEQUENCE,
+					true));
+			
+			for (String oid : eku)
+			{
+				// Object identifier
+				out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL,
+						ASN1Tag.TN_OBJECT_INDENTIFIER, false));
+				out.writeObjectIdentifier(OID.parseOID(oid));
+				out.conclude(true);
+			}
+			
+			out.conclude(true);
+		}
 	}
 }

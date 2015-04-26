@@ -22,6 +22,7 @@ import java.security.AlgorithmParameters;
 import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
@@ -46,6 +47,7 @@ implements CertificateProfile
 	private boolean[] subjectUniqueID;
 	private int basicConstraints;
 	private boolean[] keyUsage;
+	private List<String> extendedKeyUsage;
 	private Set<X509ExtensionEntry> extensions;
 	private AlgorithmParameters sigAlgParams;
 
@@ -66,6 +68,8 @@ implements CertificateProfile
 		issuerUniqueID = null;
 		subjectUniqueID = null;
 		basicConstraints = -1;
+		keyUsage = null;
+		extendedKeyUsage = null;
 		extensions = new HashSet<X509ExtensionEntry>();
 		sigAlgParams = null;
 	}
@@ -270,6 +274,29 @@ implements CertificateProfile
 	public void setKeyUsage(boolean[] keyUsage)
 	{
 		this.keyUsage = keyUsage;
+	}
+
+	/**
+	 * Certificate extended key usage or {@code null} if does not has any value.
+	 * 
+	 * <p>
+	 * An extension entry with OID 2.5.29.37 shall take precedence over it.
+	 * </p>
+	 */
+	public List<String> getExtendedKeyUsage()
+	{
+		return extendedKeyUsage;
+	}
+
+	/**
+	 * Set the certificate extended key usage.
+	 * 
+	 * @param keyUsage
+	 * 			The new extended key usage list. Can be {@code null}.
+	 */
+	public void setExtendedKeyUsage(List<String> extendedKeyUsage)
+	{
+		this.extendedKeyUsage = extendedKeyUsage;
 	}
 
 	/**

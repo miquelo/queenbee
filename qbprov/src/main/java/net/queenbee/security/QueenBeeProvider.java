@@ -19,6 +19,8 @@ package net.queenbee.security;
 
 import java.security.Provider;
 
+import net.queenbee.security.cert.X509CertificateAuthorityService;
+
 public final class QueenBeeProvider
 extends Provider
 {
@@ -30,7 +32,7 @@ extends Provider
 	public QueenBeeProvider()
 	{
 		super(NAME, VERSION, providerInfo());
-		// putService(new X509CertificateAuthorityService(this));
+		putService(new X509CertificateAuthorityService(this));
 		// putService(new JRKSKeyStoreService(this));
 		// putService(new PKCS10CertificateRequestFactoryService(this));
 	}
