@@ -44,6 +44,8 @@ implements CertificateProfile
 	private String digestAlgorithm;
 	private boolean[] issuerUniqueID;
 	private boolean[] subjectUniqueID;
+	private int basicConstraints;
+	private boolean[] keyUsage;
 	private Set<X509ExtensionEntry> extensions;
 	private AlgorithmParameters sigAlgParams;
 
@@ -63,6 +65,7 @@ implements CertificateProfile
 		digestAlgorithm = null;
 		issuerUniqueID = null;
 		subjectUniqueID = null;
+		basicConstraints = -1;
 		extensions = new HashSet<X509ExtensionEntry>();
 		sigAlgParams = null;
 	}
@@ -207,6 +210,66 @@ implements CertificateProfile
 	public void setSubjectUniqueID(boolean[] subjectUniqueID)
 	{
 		this.subjectUniqueID = subjectUniqueID;
+	}
+
+	/**
+	 * Certificate basic constraints.
+	 * 
+	 * <ul>
+	 * <li>
+	 * If value is -1, this profile is for a non CA certificate.
+	 * </li>
+	 * <li>
+	 * If it is {@link Integer#MAX_VALUE}, this profile is for a CA certificate
+	 * without a path length constraint.
+	 * </li>
+	 * <li>
+	 * Otherwise, this profile is for a CA certificate with the given path
+	 * constraint.
+	 * </li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * An extension entry with OID 2.5.29.19 shall take precedence over it.
+	 * </p>
+	 */
+	public int getBasicConstraints()
+	{
+		return basicConstraints;
+	}
+
+	/**
+	 * Set the certificate basic constraints.
+	 * 
+	 * @param basicConstraints
+	 * 			The new basic constraints value.
+	 */
+	public void setBasicConstraints(int basicConstraints)
+	{
+		this.basicConstraints = basicConstraints;
+	}
+
+	/**
+	 * Certificate key usage or {@code null} if does not has any value.
+	 * 
+	 * <p>
+	 * An extension entry with OID 2.5.29.15 shall take precedence over it.
+	 * </p>
+	 */
+	public boolean[] getKeyUsage()
+	{
+		return keyUsage;
+	}
+
+	/**
+	 * Set the certificate key usage.
+	 * 
+	 * @param keyUsage
+	 * 			The new key usage array. Can be {@code null}.
+	 */
+	public void setKeyUsage(boolean[] keyUsage)
+	{
+		this.keyUsage = keyUsage;
 	}
 
 	/**

@@ -17,6 +17,11 @@
  
 apply plugin: 'java'
 
+dependencies {
+	compile project(':asn1')
+	compile project(':caserv')
+}
+
 jar.doFirst {
 	if (!new File("${buildDir}/signer.jks").exists()) {
 		tasks.signerInit.execute()

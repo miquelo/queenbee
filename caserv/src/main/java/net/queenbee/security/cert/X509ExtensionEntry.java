@@ -17,7 +17,6 @@
 
 package net.queenbee.security.cert;
 
-import java.beans.ConstructorProperties;
 import java.io.Serializable;
 
 /**
@@ -25,40 +24,25 @@ import java.io.Serializable;
  * 
  * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
  */
-public class X509ExtensionEntry
+public abstract class X509ExtensionEntry
 implements Serializable
 {
 	private static final long serialVersionUID = -6199420338732331202L;
 	
 	private String oid;
-	private byte[] value;
 	private boolean critical;
 	
 	/**
-	 * Empty constructor.
-	 */
-	public X509ExtensionEntry()
-	{
-		this(null, null, false);
-	}
-	
-	/**
-	 * Complete constructor.
+	 * Protected constructor.
 	 * 
 	 * @param oid
-	 * @param value
+	 * 			Object identifier of this extension entry.
 	 * @param critical
+	 * 			Whether this extension is critical or not.
 	 */
-	@ConstructorProperties({
-		"oid",
-		"value",
-		"critical"
-		
-	})
-	public X509ExtensionEntry(String oid, byte[] value, boolean critical)
+	protected X509ExtensionEntry(String oid, boolean critical)
 	{
 		this.oid = oid;
-		this.value = value;
 		this.critical = critical;
 	}
 
@@ -82,25 +66,6 @@ implements Serializable
 	}
 
 	/**
-	 * Extension value.
-	 */
-	public byte[] getValue()
-	{
-		return value;
-	}
-
-	/**
-	 * Set the extension value.
-	 * 
-	 * @param value
-	 * 			The new extension value.
-	 */
-	public void setValue(byte[] value)
-	{
-		this.value = value;
-	}
-
-	/**
 	 * Whether extension is critical or not.
 	 */
 	public boolean isCritical()
@@ -118,6 +83,11 @@ implements Serializable
 	{
 		this.critical = critical;
 	}
+	
+	/**
+	 * DER encoded extension value.
+	 */
+	public abstract byte[] getValue();
 	
 	/**
 	 * String representation.

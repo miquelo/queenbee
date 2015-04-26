@@ -37,63 +37,63 @@ implements Serializable
 	private static final long serialVersionUID = 8250303483922327832L;
 	
 	/**
-	 * CCITT Recommendation OID.
+	 * ITU Recommendation OID (0.0).
 	 */
-	public static final OID CCITT_REC;
+	public static final OID ITU_REC;
 	
 	/**
-	 * CCITT Question OID.
+	 * ITU Question OID (0.1).
 	 */
-	public static final OID CCITT_QUEST;
+	public static final OID ITU_QUEST;
 	
 	/**
-	 * CCITT Administration OID.
+	 * ITU Administration OID (0.2).
 	 */
-	public static final OID CCITT_ADMIN;
+	public static final OID ITU_ADMIN;
 	
 	/**
-	 * CCITT Network Operator OID.
+	 * ITU Network Operator OID (0.3).
 	 */
-	public static final OID CCITT_NET_OP;
+	public static final OID ITU_NET_OP;
 	
 	/**
-	 * ISO Standard OID.
+	 * ISO Standard OID (1.0).
 	 */
 	public static final OID ISO_STD;
 	
 	/**
-	 * ISO Registration Authority OID.
+	 * ISO Registration Authority OID (1.1).
 	 */
 	public static final OID ISO_REG_AUTH;
 	
 	/**
-	 * ISO Member Body OID.
+	 * ISO Member Body OID (1.2).
 	 */
 	public static final OID ISO_MEM_BODY;
 	
 	/**
-	 * ISO Identified Organization OID.
+	 * ISO Identified Organization OID (1.3).
 	 */
 	public static final OID ISO_ID_ORG;
 	
 	/**
-	 * Join-ISO-CCITT DS OID.
+	 * Joint-ISO-ITU DS OID (2.5).
 	 */
-	public static final OID JOIN_DS;
+	public static final OID JOINT_DS;
 	
 	static
 	{
-		CCITT_REC = newCCITT(0);
-		CCITT_QUEST = newCCITT(1);
-		CCITT_ADMIN = newCCITT(2);
-		CCITT_NET_OP = newCCITT(3);
+		ITU_REC = newITU(0);
+		ITU_QUEST = newITU(1);
+		ITU_ADMIN = newITU(2);
+		ITU_NET_OP = newITU(3);
 		
 		ISO_STD = newISO(0);
 		ISO_REG_AUTH = newISO(1);
 		ISO_MEM_BODY = newISO(2);
 		ISO_ID_ORG = newISO(3);
 		
-		JOIN_DS = newJOIN(5);
+		JOINT_DS = newJoint(5);
 	}
 	
 	private int[] subId;
@@ -360,7 +360,7 @@ implements Serializable
 	}
 	
 	/**
-	 * Creates a CCITT object identifier.
+	 * Creates a ITU object identifier.
 	 * 
 	 * @param id2
 	 * 			Second sub-identifier.
@@ -368,13 +368,13 @@ implements Serializable
 	 * 			Next sub-identifiers.
 	 * 
 	 * @return
-	 * 			The CCITT object identifier.
+	 * 			The ITU object identifier.
 	 * 
 	 * @throws IllegalArgumentException
 	 * 			If second sub-identifier is not valid.
 	 * 			
 	 */
-	private static OID newCCITT(int id2, int... idn)
+	private static OID newITU(int id2, int... idn)
 	{
 		return new OID(0, id2, idn);
 	}
@@ -400,7 +400,7 @@ implements Serializable
 	}
 	
 	/**
-	 * Creates a Join-ISO-CCITT object identifier.
+	 * Creates a Joint-ISO-ITU object identifier.
 	 * 
 	 * @param id2
 	 * 			Second sub-identifier.
@@ -408,13 +408,13 @@ implements Serializable
 	 * 			Next sub-identifiers.
 	 * 
 	 * @return
-	 * 			The Join-ISO-CCITT object identifier.
+	 * 			The Joint-ISO-ITU object identifier.
 	 * 
 	 * @throws IllegalArgumentException
 	 * 			If second sub-identifier is not valid.
 	 * 			
 	 */
-	private static OID newJOIN(int id2, int... idn)
+	private static OID newJoint(int id2, int... idn)
 	{
 		return new OID(2, id2, idn);
 	}
