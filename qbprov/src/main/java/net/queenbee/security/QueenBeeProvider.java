@@ -33,8 +33,8 @@ extends Provider
 	{
 		super(NAME, VERSION, providerInfo());
 		putService(new X509CertificateAuthorityService(this));
-		// putService(new JRKSKeyStoreService(this));
-		// putService(new PKCS10CertificateRequestFactoryService(this));
+		putService(new JRKSKeyStoreService(this));
+		// TODO putService(new PKCS10CertificateRequestFactoryService(this));
 	}
 	
 	private static final String providerInfo()
@@ -43,7 +43,7 @@ extends Provider
 		sb.append("Queen Bee provider v");
 		sb.append(VERSION);
 		sb.append(", implementing X.509 Certificate Authority services and ");
-		sb.append("JRKS KeyStore");
+		sb.append("XML and XRKS KeyStore");
 		return sb.toString();
 	}
 }
