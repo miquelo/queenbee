@@ -21,7 +21,7 @@ import java.security.Provider;
 import java.security.Provider.Service;
 import java.util.Collections;
 
-public class JRKSKeyStoreService
+public class JKSPKeyStoreService
 extends Service
 {
 	private static final String TYPE;
@@ -31,11 +31,11 @@ extends Service
 	static
 	{
 		TYPE = "KeyStore";
-		ALGORITHM = "JKRS";
-		CLASSNAME = JRKSKeyStore.class.getName();
+		ALGORITHM = "JKSP";
+		CLASSNAME = JKSPKeyStore.class.getName();
 	}
 	
-	public JRKSKeyStoreService(Provider provider)
+	public JKSPKeyStoreService(Provider provider)
 	{
 		super(provider, TYPE, ALGORITHM, CLASSNAME,
 				Collections.<String>emptyList(),

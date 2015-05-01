@@ -18,39 +18,49 @@
 package net.queenbee.security;
 
 import java.net.URI;
+import java.security.KeyStore.LoadStoreParameter;
+import java.security.KeyStore.ProtectionParameter;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType(
-	namespace="http://xmlns.queenbee.net/xml/ns/jrks",
-	name="JRKSKeyStoreDefinitionType"
-)
-@XmlRootElement(
-	namespace="http://xmlns.queenbee.net/xml/ns/jrks",
-	name="keystore"
-)
-public class JRKSKeyStoreDefinition
+/**
+ * Java KeyStore Proxy load/store parameter.
+ * 
+ * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ */
+public class JKSPLoadStoreParameter
+implements LoadStoreParameter
 {
 	private URI reference;
+	private ProtectionParameter protParam;
 	
-	public JRKSKeyStoreDefinition()
+	/**
+	 * Complete constructor.
+	 * 
+	 * @param reference
+	 * 			Key store reference.
+	 * @param protParam
+	 * 			Protection parameter for accessing key store.
+	 */
+	public JKSPLoadStoreParameter(URI reference,
+			ProtectionParameter protParam)
 	{
-		reference = null;
+		this.reference = reference;
+		this.protParam = protParam;
 	}
-
-	@XmlElement(
-		namespace="http://xmlns.queenbee.net/xml/ns/jrks",
-		name="reference"
-	)
+	
+	/**
+	 * Key store reference.
+	 */
 	public URI getReference()
 	{
 		return reference;
 	}
 
-	public void setReference(URI reference)
+	/**
+	 * Protection parameter for accessing key store. 
+	 */
+	@Override
+	public ProtectionParameter getProtectionParameter()
 	{
-		this.reference = reference;
+		return protParam;
 	}
 }

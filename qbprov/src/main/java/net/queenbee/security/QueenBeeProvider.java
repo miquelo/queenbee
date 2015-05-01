@@ -33,7 +33,7 @@ extends Provider
 	{
 		super(NAME, VERSION, providerInfo());
 		putService(new X509CertificateAuthorityService(this));
-		putService(new JRKSKeyStoreService(this));
+		putService(new JKSPKeyStoreService(this));
 		// TODO putService(new PKCS10CertificateRequestFactoryService(this));
 	}
 	

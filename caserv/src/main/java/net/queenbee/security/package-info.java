@@ -16,6 +16,6 @@
  */
 
 /**
- * Package for CA Services, including Java Remote KeyStore.
+ * Package for CA Services, including Java KeyStore Proxy.
  */
 package net.queenbee.security;

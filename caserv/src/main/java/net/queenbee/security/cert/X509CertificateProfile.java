@@ -291,7 +291,7 @@ implements CertificateProfile
 	/**
 	 * Set the certificate extended key usage.
 	 * 
-	 * @param keyUsage
+	 * @param extendedKeyUsage
 	 * 			The new extended key usage list. Can be {@code null}.
 	 */
 	public void setExtendedKeyUsage(List<String> extendedKeyUsage)

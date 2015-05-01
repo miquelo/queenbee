@@ -31,14 +31,12 @@ import java.security.cert.CertificateException;
 import java.util.Date;
 import java.util.Enumeration;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-public class JRKSKeyStore
+public class JKSPKeyStore
 extends KeyStoreSpi
 {
-	public JRKSKeyStore()
+	// Support for QBKS! Remote call interfaces! (Delete me)
+	
+	public JKSPKeyStore()
 	{
 	}
 	
@@ -168,13 +166,5 @@ extends KeyStoreSpi
 	throws KeyStoreException
 	{
 		// TODO ...
-	}
-	
-	private static JRKSKeyStoreDefinition definitionLoad(InputStream stream)
-	throws JAXBException
-	{
-		JAXBContext ctx = JAXBContext.newInstance(JRKSKeyStoreDefinition.class);
-		Unmarshaller u = ctx.createUnmarshaller();
-		return (JRKSKeyStoreDefinition) u.unmarshal(stream);
 	}
 }
