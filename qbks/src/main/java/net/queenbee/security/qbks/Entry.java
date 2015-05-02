@@ -15,22 +15,22 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.queenbee.security;
+package net.queenbee.security.qbks;
 
 import java.security.cert.Certificate;
 import java.util.Date;
 
-public abstract class JKSPEntry
+public abstract class Entry
 {
 	private String alias;
 	private Date creationDate;
 	
-	public JKSPEntry()
+	public Entry()
 	{
 		this(null, null);
 	}
 	
-	public JKSPEntry(String alias, Date creationDate)
+	public Entry(String alias, Date creationDate)
 	{
 		this.alias = alias;
 		this.creationDate = creationDate;
@@ -81,9 +81,9 @@ public abstract class JKSPEntry
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (obj != null && obj instanceof JKSPEntry)
+		if (obj != null && obj instanceof Entry)
 		{
-			JKSPEntry entry = (JKSPEntry) obj;
+			Entry entry = (Entry) obj;
 			return alias != null && alias.equalsIgnoreCase(entry.alias);
 		}
 		return false;

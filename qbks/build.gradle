@@ -15,4 +15,9 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-include 'asn1', 'caserv', 'qbks', 'qbprov'
+apply plugin: 'java'
+
+dependencies {
+	compile project(':asn1')
+	compile project(':caserv')
+}

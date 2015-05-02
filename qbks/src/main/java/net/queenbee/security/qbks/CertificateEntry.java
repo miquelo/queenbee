@@ -15,22 +15,22 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.queenbee.security;
+package net.queenbee.security.qbks;
 
 import java.security.cert.Certificate;
 import java.util.Date;
 
-public class JKSPCertificateEntry
-extends JKSPEntry
+public class CertificateEntry
+extends Entry
 {
 	private Certificate certificate;
 	
-	public JKSPCertificateEntry(String alias, Certificate cert)
+	public CertificateEntry(String alias, Certificate cert)
 	{
 		this(alias, new Date(), cert);
 	}
 	
-	public JKSPCertificateEntry(String alias, Date creationDate,
+	public CertificateEntry(String alias, Date creationDate,
 			Certificate cert)
 	{
 		super(alias, creationDate);

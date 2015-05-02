@@ -14,5 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-include 'asn1', 'caserv', 'qbks', 'qbprov'
+
+package net.queenbee.security;
+
+import java.net.URI;
+
+import net.queenbee.security.KeyStoreProxy;
+import net.queenbee.security.KeyStoreProxyFactory;
+
+public class QBKSKeyStoreProxyFactory
+extends KeyStoreProxyFactory
+{
+	private static final String REFERENCE_SCHEME = "qbks";
+	
+	@Override
+	public boolean supported(URI keyStoreRef)
+	{
+		return REFERENCE_SCHEME.equals(keyStoreRef.getScheme());
+	}
+
+	@Override
+	public KeyStoreProxy createProxy()
+	{
+		return new QBKSKeyStoreProxy();
+	}
+}

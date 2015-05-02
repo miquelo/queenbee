@@ -14,5 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-include 'asn1', 'caserv', 'qbks', 'qbprov'
+
+package net.queenbee.security;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+import net.queenbee.security.JKSPLoadStoreParameter;
+import net.queenbee.security.KeyStoreProxy;
+
+public class QBKSKeyStoreProxy
+implements KeyStoreProxy
+{
+	public QBKSKeyStoreProxy()
+	{
+	}
+	
+	@Override
+	public void load(JKSPLoadStoreParameter param)
+	throws IOException, NoSuchAlgorithmException, CertificateException
+	{
+		// TODO ...
+	}
+
+	@Override
+	public void store(JKSPLoadStoreParameter param)
+	throws IOException, NoSuchAlgorithmException, CertificateException
+	{
+		// TODO ...
+	}
+}
