@@ -112,79 +112,69 @@ extends KeyStoreSpi
 	@Override
 	public boolean engineContainsAlias(String alias)
 	{
-		// TODO ...
-		return false;
+		return getProxy().containsAlias(alias);
 	}
 	
 	@Override
 	public Enumeration<String> engineAliases()
 	{
-		// TODO ...
-		return null;
+		return getProxy().aliases();
 	}
 	
 	@Override
 	public int engineSize()
 	{
-		// TODO ...
-		return 0;
+		return getProxy().size();
 	}
 	
 	@Override
 	public boolean engineIsCertificateEntry(String alias)
 	{
-		// TODO ...
-		return false;
+		return getProxy().isCertificateEntry(alias);
 	}
 	
 	@Override
 	public boolean engineIsKeyEntry(String alias)
 	{
-		// TODO ...
-		return false;
+		return getProxy().isKeyEntry(alias);
 	}
 	
 	@Override
 	public String engineGetCertificateAlias(Certificate cert)
 	{
-		// TODO ...
-		return null;
+		return getProxy().getCertificateAlias(cert);
 	}
 	
 	@Override
 	public Date engineGetCreationDate(String alias)
 	{
-		// TODO ...
-		return null;
+		return getProxy().getCreationDate(alias);
 	}
 	
 	@Override
 	public Certificate engineGetCertificate(String alias)
 	{
-		// TODO ...
-		return null;
+		return getProxy().getCertificate(alias);
 	}
 	
 	@Override
 	public Key engineGetKey(String alias, char[] password)
 	throws NoSuchAlgorithmException, UnrecoverableKeyException
 	{
-		// TODO ...
-		return null;
+		return getProxy().getKey(alias, password);
 	}
 	
 	@Override
 	public Certificate[] engineGetCertificateChain(String alias)
 	{
-		// TODO ...
-		return null;
+		return getProxy().getCertificateChain(alias);
 	}
 	
 	@Override
 	public void engineSetCertificateEntry(String alias, Certificate cert)
 	throws KeyStoreException
 	{
-		// TODO ...
+		getProxy().setCertificateEntry(alias, cert);
 	}
 
 	@Override
@@ -192,21 +182,21 @@ extends KeyStoreSpi
 			Certificate[] chain)
 	throws KeyStoreException
 	{
-		// TODO ...
+		getProxy().setKeyEntry(alias, key, password, chain);
 	}
 
 	@Override
 	public void engineSetKeyEntry(String alias, byte[] key, Certificate[] chain)
 	throws KeyStoreException
 	{
-		// TODO ...
+		getProxy().setKeyEntry(alias, key, chain);
 	}
 	
 	@Override
 	public void engineDeleteEntry(String alias)
 	throws KeyStoreException
 	{
-		// TODO ...
+		getProxy().deleteEntry(alias);
 	}
 	
 	private void load(LoadStoreParameter param)
@@ -241,9 +231,16 @@ extends KeyStoreSpi
 		{
 			JKSPLoadStoreParameter jkspParam =
 					(JKSPLoadStoreParameter) param;
-			proxy.store(jkspParam);
+			getProxy().store(jkspParam);
 		}
 		throwUnsupportedLoadStoreParameter(param);
+	}
+	
+	private KeyStoreProxy getProxy()
+	{
+		if (proxy == null)
+			throw new IllegalStateException("Empty proxy");
+		return proxy;
 	}
 	
 	private static void throwUnsupportedLoadStoreParameter(
