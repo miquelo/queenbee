@@ -20,8 +20,11 @@ package net.queenbee.security;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Key;
 import java.security.KeyStore.LoadStoreParameter;
+import java.security.KeyStore.PasswordProtection;
 import java.security.KeyStoreException;
 import java.security.KeyStoreSpi;
 import java.security.NoSuchAlgorithmException;
@@ -30,42 +33,80 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 public class JKSPKeyStore
 extends KeyStoreSpi
 {
-	// Support for QBKS! Remote call interfaces! (Delete me)
+	private static final String REFERENCE_PROP_NAME = "reference";
+	
+	private KeyStoreProxy proxy;
+	private URI reference;
+	private Map<String, Object> extraParams;
 	
 	public JKSPKeyStore()
 	{
+		proxy = null;
+		reference = null;
+		extraParams = new HashMap<>();
 	}
 	
 	@Override
 	public void engineLoad(InputStream stream, char[] password)
 	throws IOException, NoSuchAlgorithmException, CertificateException
 	{
-		// TODO ...
+		try
+		{
+			Properties properties = new Properties();
+			properties.load(stream);
+			if (!properties.contains(REFERENCE_PROP_NAME))
+				throw new IOException("Proxy reference is not defined");
+			URI ref = new URI(properties.getProperty(REFERENCE_PROP_NAME));
+			Map<String, Object> params = new HashMap<>();
+			for (Entry<Object, Object> entry : properties.entrySet())
+			{
+				Object propertyName = entry.getKey();
+				if (!REFERENCE_PROP_NAME.equals(propertyName))
+					params.put(propertyName.toString(), entry.getValue());
+			}
+			JKSPLoadStoreParameter param = new JKSPLoadStoreParameter(ref,
+					new PasswordProtection(password), params);
+			load(param);
+		}
+		catch (URISyntaxException exception)
+		{
+			throw new IOException("Bad KeyStore proxy reference", exception);
+		}
 	}
 	
 	@Override
 	public void engineLoad(LoadStoreParameter param)
 	throws IOException, NoSuchAlgorithmException, CertificateException
 	{
-		// TODO ...
+		load(param);
 	}
 	
 	@Override
 	public void engineStore(OutputStream stream, char[] password)
 	throws IOException, NoSuchAlgorithmException, CertificateException
 	{
-		// TODO ...
+		JKSPLoadStoreParameter param = new JKSPLoadStoreParameter(
+				reference, new PasswordProtection(password), extraParams);
+		store(param);
+		Properties properties = new Properties();
+		for (Entry<String, Object> entry : extraParams.entrySet())
+			properties.put(entry.getKey(), entry.getValue());
+		properties.store(stream, null);
 	}
 	
 	@Override
 	public void engineStore(LoadStoreParameter param)
 	throws IOException, NoSuchAlgorithmException, CertificateException
 	{
-		// TODO ...
+		store(param);
 	}
 	
 	@Override
@@ -166,5 +207,52 @@ extends KeyStoreSpi
 	throws KeyStoreException
 	{
 		// TODO ...
+	}
+	
+	private void load(LoadStoreParameter param)
+	throws IOException, NoSuchAlgorithmException, CertificateException
+	{
+		try
+		{
+			if (param instanceof JKSPLoadStoreParameter)
+			{
+				JKSPLoadStoreParameter jkspParam =
+						(JKSPLoadStoreParameter) param;
+				reference = jkspParam.getReference();
+				KeyStoreProxyFactory fact =
+						KeyStoreProxyFactory.newSupported(reference);
+				extraParams.clear();
+				extraParams.putAll(jkspParam.getExtraParameters());
+				proxy = fact.createProxy();
+				proxy.load(jkspParam);
+			}
+			throwUnsupportedLoadStoreParameter(param);
+		}
+		catch (UnsupportedKeyStoreReferenceException exception)
+		{
+			throw new IOException("KeyStore load error", exception);
+		}
+	}
+	
+	private void store(LoadStoreParameter param)
+	throws IOException, NoSuchAlgorithmException, CertificateException
+	{
+		if (param instanceof JKSPLoadStoreParameter)
+		{
+			JKSPLoadStoreParameter jkspParam =
+					(JKSPLoadStoreParameter) param;
+			proxy.store(jkspParam);
+		}
+		throwUnsupportedLoadStoreParameter(param);
+	}
+	
+	private static void throwUnsupportedLoadStoreParameter(
+			LoadStoreParameter param)
+	throws IOException
+	{
+		StringBuilder msg = new StringBuilder();
+		msg.append("Unsupported LoadStoreParameter type ");
+		msg.append(param.getClass());
+		throw new IOException(msg.toString());
 	}
 }

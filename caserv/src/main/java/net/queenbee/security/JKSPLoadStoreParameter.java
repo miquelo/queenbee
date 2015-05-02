@@ -20,6 +20,8 @@ package net.queenbee.security;
 import java.net.URI;
 import java.security.KeyStore.LoadStoreParameter;
 import java.security.KeyStore.ProtectionParameter;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Java KeyStore Proxy load/store parameter.
@@ -31,9 +33,10 @@ implements LoadStoreParameter
 {
 	private URI reference;
 	private ProtectionParameter protParam;
+	private Map<String, Object> extraParameters;
 	
 	/**
-	 * Complete constructor.
+	 * Constructor without extra parameters.
 	 * 
 	 * @param reference
 	 * 			Key store reference.
@@ -43,8 +46,25 @@ implements LoadStoreParameter
 	public JKSPLoadStoreParameter(URI reference,
 			ProtectionParameter protParam)
 	{
+		this(reference, protParam, Collections.<String, Object>emptyMap());
+	}
+	
+	/**
+	 * Constructor with extra parameters.
+	 * 
+	 * @param reference
+	 * 			Key store reference.
+	 * @param protParam
+	 * 			Protection parameter for accessing key store.
+	 * @param extraParameters
+	 * 			Extra parameters.
+	 */
+	public JKSPLoadStoreParameter(URI reference,
+			ProtectionParameter protParam, Map<String, Object> extraParameters)
+	{
 		this.reference = reference;
 		this.protParam = protParam;
+		this.extraParameters = extraParameters;
 	}
 	
 	/**
@@ -62,5 +82,13 @@ implements LoadStoreParameter
 	public ProtectionParameter getProtectionParameter()
 	{
 		return protParam;
+	}
+
+	/**
+	 * Extra parameters.
+	 */
+	public Map<String, Object> getExtraParameters()
+	{
+		return extraParameters;
 	}
 }

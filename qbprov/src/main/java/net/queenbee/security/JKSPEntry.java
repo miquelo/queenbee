@@ -47,11 +47,7 @@ public abstract class JKSPEntry
 	}
 	
 	/*
-	 * Empty creation date means that this is an offline entry.
-	 * 
-	 * Used to determine if cached entry must be invalidated. Empty creation
-	 * date implies an automatically invalidated cache, and KeyStore must
-	 * provide its own date at KeyStore.getCreationDate(...).
+	 * Used to determine if cached entry must be invalidated.
 	 */
 	public Date getCreationDate()
 	{
