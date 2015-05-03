@@ -18,6 +18,7 @@
 package net.queenbee.security;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.security.Key;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -27,14 +28,18 @@ import java.security.cert.CertificateException;
 import java.util.Date;
 import java.util.Enumeration;
 
-import net.queenbee.security.JKSPLoadStoreParameter;
-import net.queenbee.security.KeyStoreProxy;
+import net.queenbee.security.qbks.EntrySet;
 
 public class QBKSKeyStoreProxy
 implements KeyStoreProxy
 {
+	private EntrySet entrySet;
+	private Socket socket;
+	
 	public QBKSKeyStoreProxy()
 	{
+		entrySet = new EntrySet();
+		socket = null;
 	}
 	
 	@Override

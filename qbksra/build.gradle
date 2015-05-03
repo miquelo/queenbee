@@ -15,4 +15,39 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-include 'asn1', 'caserv', 'qbks', 'qbksra', 'qbprov'
+apply plugin: 'java'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	provided
+}
+ 
+sourceSets {
+	main {
+		compileClasspath += configurations.provided
+		runtimeClasspath += configurations.provided
+	}
+	test {
+		compileClasspath += configurations.provided
+		runtimeClasspath += configurations.provided
+	}
+}
+
+dependencies {
+	compile project(':asn1')
+	provided 'javax:javaee-api:7.0'
+}
+
+task copyDependencies(type: Copy) {
+	into "$sourceSets.main.output.resourcesDir"
+	from configurations.compile + configurations.runtime
+}
+
+jar {
+	extension="rar"
+}
+
+processResources.dependsOn copyDependencies
