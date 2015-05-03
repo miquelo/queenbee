@@ -15,4 +15,4 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-include 'asn1', 'caserv', 'qbks', 'qbksra', 'qbprov'
+include 'asn1', 'caserv', 'qbksp', 'qbksra', 'qbprov'
