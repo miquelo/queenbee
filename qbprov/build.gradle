@@ -56,6 +56,7 @@ task signerSignJar(type: Exec) {
 		'-storepass', '123456',
 		'-keypass', '123456',
 		'-sigfile', 'QBS',
+		'-tsa', 'https://timestamp.geotrust.com/tsa',
 		"${libsDir}/qbprov.jar",
 		'signer'
 }
