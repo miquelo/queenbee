@@ -51,3 +51,12 @@ jar {
 }
 
 processResources.dependsOn copyDependencies
+
+eclipse {
+	project {
+		name = 'queenbee-qbksra'
+	}
+	classpath {
+		plusConfigurations += [ configurations.provided ]
+	}
+}

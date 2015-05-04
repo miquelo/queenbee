@@ -21,3 +21,9 @@ dependencies {
 	compile project(':asn1')
 	compile project(':caserv')
 }
+
+eclipse {
+	project {
+		name = 'queenbee-qbksp'
+	}
+}

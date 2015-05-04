@@ -58,3 +58,9 @@ task signerSignJar(type: Exec) {
 		"${libsDir}/qbprov.jar",
 		'signer'
 }
+
+eclipse {
+	project {
+		name = 'queenbee-qbprov'
+	}
+}
