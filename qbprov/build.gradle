@@ -59,6 +59,7 @@ task signerSignJar(type: Exec) {
 		'-tsa', 'https://timestamp.geotrust.com/tsa',
 		"${libsDir}/qbprov.jar",
 		'signer'
+	standardOutput = new ByteArrayOutputStream()
 }
 
 eclipse {
