@@ -22,11 +22,21 @@ import java.io.Serializable;
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
 import javax.resource.spi.BootstrapContext;
+import javax.resource.spi.Connector;
 import javax.resource.spi.ResourceAdapter;
 import javax.resource.spi.ResourceAdapterInternalException;
+import javax.resource.spi.TransactionSupport.TransactionSupportLevel;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 
+@Connector(
+	displayName="QBKeyStoreResourceAdapter",
+	description="QueenBee KeyStore Adapter",
+	vendorName="QueenBee",
+	eisType="QBKSRA",
+	version="0.1",
+	transactionSupport=TransactionSupportLevel.NoTransaction
+)
 public class QBKeyStoreResourceAdapter
 implements ResourceAdapter, Serializable
 {
