@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * ASN.1 tag.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class ASN1Tag
 implements Serializable

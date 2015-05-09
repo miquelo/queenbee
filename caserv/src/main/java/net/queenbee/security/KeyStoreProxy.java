@@ -30,7 +30,7 @@ import java.util.Enumeration;
 /**
  * Generic contracts for KeyStore proxy.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public interface KeyStoreProxy
 {

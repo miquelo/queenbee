@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * X.509 Certificate extension entry.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public abstract class X509ExtensionEntry
 implements Serializable

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Java KeyStore Proxy load/store parameter.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class JKSPLoadStoreParameter
 implements LoadStoreParameter

@@ -18,6 +18,7 @@
 package net.queenbee.resource.keystore;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
@@ -27,7 +28,10 @@ import javax.resource.spi.ResourceAdapter;
 import javax.resource.spi.ResourceAdapterInternalException;
 import javax.resource.spi.TransactionSupport.TransactionSupportLevel;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
+import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
+
+import net.queenbee.resource.keystore.util.Util;
 
 @Connector(
 	displayName="QBKeyStoreResourceAdapter",
@@ -41,16 +45,35 @@ public class QBKeyStoreResourceAdapter
 implements ResourceAdapter, Serializable
 {
 	private static final long serialVersionUID = 2235931909271428353L;
+	private static final Logger logger;
+	
+	static
+	{
+		logger = Util.getPackageLogger();
+	}
+	
+	private WorkManager workMgr;
+	
+	public QBKeyStoreResourceAdapter()
+	{
+		workMgr = null;
+	}
 
 	@Override
 	public void start(BootstrapContext ctx)
 	throws ResourceAdapterInternalException
 	{
+		workMgr = ctx.getWorkManager();
+		
+		logger.info("KeyStore resource adapter started");
 	}
 
 	@Override
 	public void stop()
 	{
+		workMgr = null;
+		
+		logger.info("KeyStore resource adapter stopped");
 	}
 
 	@Override

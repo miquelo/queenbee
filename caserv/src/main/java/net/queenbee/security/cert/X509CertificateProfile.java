@@ -30,7 +30,7 @@ import javax.security.auth.x500.X500Principal;
 /**
  * X.509 Certificate profile.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class X509CertificateProfile
 implements CertificateProfile

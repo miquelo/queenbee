@@ -23,7 +23,7 @@ import java.security.cert.Certificate;
 /**
  * Certificate Authority SPI.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public abstract class CertificateAuthoritySpi
 {

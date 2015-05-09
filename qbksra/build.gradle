@@ -39,6 +39,7 @@ sourceSets {
 
 dependencies {
 	compile project(':asn1')
+	compile project(':qbks')
 	provided 'javax:javaee-api:7.0'
 }
 
@@ -49,6 +50,10 @@ task copyDependencies(type: Copy) {
 
 jar {
 	extension="rar"
+}
+
+javadoc {
+	classpath += configurations.provided
 }
 
 processResources.dependsOn copyDependencies

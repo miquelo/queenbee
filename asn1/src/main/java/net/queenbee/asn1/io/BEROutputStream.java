@@ -39,7 +39,7 @@ import net.queenbee.asn1.OID;
 /**
  * BER output stream.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class BEROutputStream
 extends OutputStream

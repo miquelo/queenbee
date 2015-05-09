@@ -20,7 +20,7 @@ package net.queenbee.asn1;
 /**
  * ASN.1 class.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public enum ASN1Class
 {

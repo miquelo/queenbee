@@ -29,7 +29,7 @@ import java.util.StringTokenizer;
 /**
  * ASN.1 object identifier.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class OID
 implements Serializable

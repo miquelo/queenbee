@@ -14,11 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-include \
-'asn1',
-'caserv',
-'qbks',
-'qbksp',
-'qbksra',
-'qbprov'
+
+package net.queenbee.keystore;
+
+/**
+ * Listener for QueenBee distributed key store.
+ * 
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
+ */
+public interface KeyStoreListener
+{
+}

@@ -22,7 +22,7 @@ import java.io.InputStream;
 /**
  * Certificate request factory SPI.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public abstract class CertificateRequestFactorySpi
 {

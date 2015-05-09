@@ -14,11 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-include \
-'asn1',
-'caserv',
-'qbks',
-'qbksp',
-'qbksra',
-'qbprov'
+
+package net.queenbee.resource.keystore.util;
+
+import java.util.logging.Logger;
+
+public class Util
+{
+	private static final String PACKAGE_NAME;
+	
+	static
+	{
+		PACKAGE_NAME = "net.queenbee.resource.keystore";
+	}
+	
+	private Util()
+	{
+	}
+	
+	public static Logger getPackageLogger()
+	{
+		return Logger.getLogger(PACKAGE_NAME);
+	}
+}

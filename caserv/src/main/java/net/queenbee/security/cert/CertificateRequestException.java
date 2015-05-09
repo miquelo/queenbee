@@ -20,7 +20,7 @@ package net.queenbee.security.cert;
 /**
  * Exception occurred when verifying a certificate request.
  * 
- * @author Miquel A. Ferran <miquel.ferran.gonzalez@gmail.com>
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public class CertificateRequestException
 extends Exception
