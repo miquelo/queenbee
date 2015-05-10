@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -256,9 +257,22 @@ extends OutputStream
 	public void writeUTF8String(String str)
 	throws IOException
 	{
-		Writer writer = new OutputStreamWriter(this, StandardCharsets.UTF_8);
-		writer.write(str);
-		writer.flush();
+		writeString(str, StandardCharsets.UTF_8);
+	}
+	
+	/**
+	 * Write universal IA5 string.
+	 * 
+	 * @param str
+	 * 			IA5 string to be written.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public void writeIA5String(String str)
+	throws IOException
+	{
+		writeString(str, StandardCharsets.US_ASCII);
 	}
 	
 	/**
@@ -355,6 +369,17 @@ extends OutputStream
 		flush();
 		out.close();
 		output.close();
+	}
+	
+	/*
+	 * Write an string using the given character set.
+	 */
+	private void writeString(String str, Charset charset)
+	throws IOException
+	{
+		Writer writer = new OutputStreamWriter(this, charset);
+		writer.write(str);
+		writer.flush();
 	}
 	
 	private static BigInteger getTagIdentifierSize(ASN1Tag tag,

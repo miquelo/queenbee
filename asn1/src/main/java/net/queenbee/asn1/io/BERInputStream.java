@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -271,23 +272,26 @@ extends InputStream
 	 * 
 	 * @throws IOException
 	 * 			If some input/output stream error has been occurred.
-	 * @throws BEREncodingException
-	 * 			If some encoding error has been occurred.
 	 */
 	public String readUTF8String()
-	throws IOException, BEREncodingException
+	throws IOException
 	{
-		Reader reader = new InputStreamReader(this, StandardCharsets.UTF_8);
-		StringBuilder sb = new StringBuilder();
-		int bufLen = 32;
-		char[] buf = new char[bufLen];
-		int len = reader.read(buf, 0, bufLen);
-		while (len > 0)
-		{
-			sb.append(buf);
-			len = reader.read(buf, 0, bufLen);
-		}
-		return sb.toString();
+		return readString(StandardCharsets.UTF_8);
+	}
+	
+	/**
+	 * Read universal IA5 string.
+	 * 
+	 * @return
+	 * 			IA5 string value.
+	 * 
+	 * @throws IOException
+	 * 			If some input/output stream error has been occurred.
+	 */
+	public String readIA5String()
+	throws IOException
+	{
+		return readString(StandardCharsets.US_ASCII);
 	}
 	
 	/**
@@ -388,6 +392,25 @@ extends InputStream
 	throws IOException
 	{
 		input.close();
+	}
+	
+	/*
+	 * Read an string using the given character set.
+	 */
+	private String readString(Charset charset)
+	throws IOException
+	{
+		Reader reader = new InputStreamReader(this, charset);
+		StringBuilder sb = new StringBuilder();
+		int bufLen = 32;
+		char[] buf = new char[bufLen];
+		int len = reader.read(buf, 0, bufLen);
+		while (len > 0)
+		{
+			sb.append(buf);
+			len = reader.read(buf, 0, bufLen);
+		}
+		return sb.toString();
 	}
 	
 	private static TagInput constructedReadTag(TagInput input, ASN1Tag tag)

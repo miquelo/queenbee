@@ -32,6 +32,8 @@ import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
 import net.queenbee.resource.keystore.util.Util;
+import net.queenbee.resource.keystore.work.EndpointActivationWork;
+import net.queenbee.resource.keystore.work.KeyStoreServiceWork;
 
 @Connector(
 	displayName="QBKeyStoreResourceAdapter",
@@ -52,27 +54,27 @@ implements ResourceAdapter, Serializable
 		logger = Util.getPackageLogger();
 	}
 	
-	private WorkManager workMgr;
+	private WorkManager workManager;
+	private KeyStoreServiceWork serviceWork;
 	
 	public QBKeyStoreResourceAdapter()
 	{
-		workMgr = null;
+		workManager = null;
+		serviceWork = null;
 	}
 
 	@Override
 	public void start(BootstrapContext ctx)
 	throws ResourceAdapterInternalException
 	{
-		workMgr = ctx.getWorkManager();
-		
+		workManager = ctx.getWorkManager();
 		logger.info("KeyStore resource adapter started");
 	}
 
 	@Override
 	public void stop()
 	{
-		workMgr = null;
-		
+		workManager = null;
 		logger.info("KeyStore resource adapter stopped");
 	}
 
@@ -81,12 +83,27 @@ implements ResourceAdapter, Serializable
 			ActivationSpec spec)
 	throws ResourceException
 	{
+		if (spec instanceof QBKeyStoreActivationSpec)
+		{
+			workManager.scheduleWork(new EndpointActivationWork(this,
+					(QBKeyStoreActivationSpec) spec, workManager,
+					endpointFactory));
+			spec.setResourceAdapter(this);
+		}
+		StringBuilder msg = new StringBuilder();
+		msg.append("Incompatibe activation spec type ").append(spec.getClass());
+		throw new ResourceException(msg.toString());
 	}
-
+	
 	@Override
 	public void endpointDeactivation(MessageEndpointFactory endpointFactory,
 			ActivationSpec spec)
 	{
+		if (spec instanceof QBKeyStoreActivationSpec && serviceWork != null)
+		{
+			serviceWork.release();
+			serviceWork = null;
+		}
 	}
 
 	@Override
@@ -94,5 +111,10 @@ implements ResourceAdapter, Serializable
 	throws ResourceException
 	{
 		return null;
+	}
+	
+	public void setServiceWork(KeyStoreServiceWork serviceWork)
+	{
+		this.serviceWork = serviceWork;
 	}
 }
