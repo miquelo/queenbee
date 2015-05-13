@@ -43,7 +43,6 @@ implements CertificateProfile
 	private Date notBefore;
 	private Date notAfter;
 	private String digestAlgorithm;
-	private boolean[] issuerUniqueID;
 	private boolean[] subjectUniqueID;
 	private int basicConstraints;
 	private boolean[] keyUsage;
@@ -65,7 +64,6 @@ implements CertificateProfile
 		notBefore = new Date();
 		notAfter = new Date();
 		digestAlgorithm = null;
-		issuerUniqueID = null;
 		subjectUniqueID = null;
 		basicConstraints = -1;
 		keyUsage = null;
@@ -176,25 +174,6 @@ implements CertificateProfile
 	public void setDigestAlgorithm(String digestAlgorithm)
 	{
 		this.digestAlgorithm = digestAlgorithm;
-	}
-
-	/**
-	 * Certificate issuer unique identifier.
-	 */
-	public boolean[] getIssuerUniqueID()
-	{
-		return issuerUniqueID;
-	}
-
-	/**
-	 * Set the certificate issuer unique identifier.
-	 *  
-	 * @param issuerUniqueID
-	 * 			The new issuer unique identifier.
-	 */
-	public void setIssuerUniqueID(boolean[] issuerUniqueID)
-	{
-		this.issuerUniqueID = issuerUniqueID;
 	}
 
 	/**
