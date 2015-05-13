@@ -36,18 +36,26 @@ implements ActivationSpec, Serializable
 {
 	private static final long serialVersionUID = 5340132307487762015L;
 	
-	private static final String DEFAULT_PORT = "6578";
-	private static final String DEFAULT_MAXIMUM_CONNECTIONS = "20";
-	
 	private ResourceAdapter ra;
-	private String port;
-	private String maximumConnections;
+	private String listenerName;
 	
 	public QBKeyStoreActivationSpec()
 	{
 		ra = null;
-		port = null;
-		maximumConnections = null;
+		listenerName = null;
+	}
+
+	@ConfigProperty(
+		type=String.class
+	)
+	public String getListenerName()
+	{
+		return listenerName;
+	}
+
+	public void setListenerName(String listenerName)
+	{
+		this.listenerName = listenerName;
 	}
 
 	@Override
@@ -67,52 +75,10 @@ implements ActivationSpec, Serializable
 	public void validate()
 	throws InvalidPropertyException
 	{
-		if (!validInt(port))
+		if (listenerName == null)
 		{
-			StringBuilder msg = new StringBuilder();
-			msg.append("Invalid port ").append(port);
-			throw new InvalidPropertyException(msg.toString());
-		}
-	}
-
-	@ConfigProperty(
-		type=Integer.class,
-		defaultValue=DEFAULT_PORT
-	)
-	public String getPort()
-	{
-		return port;
-	}
-
-	public void setPort(String port)
-	{
-		this.port = port;
-	}
-	
-	@ConfigProperty(
-		type=Integer.class,
-		defaultValue=DEFAULT_MAXIMUM_CONNECTIONS
-	)
-	public String getMaximumConnections()
-	{
-		return maximumConnections;
-	}
-
-	public void setMaximumConnections(String maximumConnections)
-	{
-		this.maximumConnections = maximumConnections;
-	}
-
-	private static boolean validInt(String str)
-	{
-		try
-		{
-			Integer.parseInt(str);
-			return true;
-		}
-		catch (Exception exception)
-		{
-			return false;
+			String msg = "Listener name must not be empty";
+			throw new InvalidPropertyException(msg);
 		}
 	}
 }

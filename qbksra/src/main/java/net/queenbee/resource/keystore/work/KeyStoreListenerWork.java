@@ -17,26 +17,15 @@
 
 package net.queenbee.resource.keystore.work;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.work.Work;
-import javax.resource.spi.work.WorkContext;
-import javax.resource.spi.work.WorkContextProvider;
 
 import net.queenbee.resource.keystore.util.Util;
 
 public class KeyStoreListenerWork
-implements Work, WorkContextProvider
+implements Work
 {
-	private static final long serialVersionUID = 1L;
-	
 	private static final Logger logger;
 	
 	static
@@ -44,50 +33,17 @@ implements Work, WorkContextProvider
 		logger = Util.getPackageLogger();
 	}
 	
-	private Socket socket;
-	private MessageEndpoint endpoint;
-	private KeyStoreSecurityContext securityContext;
-	
-	public KeyStoreListenerWork(Socket socket, MessageEndpoint endpoint,
-			String keyStoreName, char[] password)
+	public KeyStoreListenerWork()
 	{
-		this.socket = socket;
-		this.endpoint = endpoint;
-		securityContext = new KeyStoreSecurityContext(socket, keyStoreName,
-				password);
 	}
 	
 	@Override
 	public void run()
 	{
-		try
-		{
-			InputStream in = socket.getInputStream();
-			OutputStream out = socket.getOutputStream();
-			
-			// TODO Request keystore info, causing security check
-		}
-		catch (IOException exception)
-		{
-		}
 	}
 
 	@Override
 	public void release()
 	{
-		try
-		{
-			socket.close();
-		}
-		catch (IOException exception)
-		{
-			logger.severe(exception.getMessage());
-		}
-	}
-
-	@Override
-	public List<WorkContext> getWorkContexts()
-	{
-		return Arrays.<WorkContext>asList(securityContext);
 	}
 }

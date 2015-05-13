@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
 import javax.resource.spi.BootstrapContext;
+import javax.resource.spi.ConfigProperty;
 import javax.resource.spi.Connector;
 import javax.resource.spi.ResourceAdapter;
 import javax.resource.spi.ResourceAdapterInternalException;
@@ -32,8 +33,7 @@ import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
 import net.queenbee.resource.keystore.util.Util;
-import net.queenbee.resource.keystore.work.EndpointActivationWork;
-import net.queenbee.resource.keystore.work.KeyStoreServiceWork;
+import net.queenbee.resource.keystore.work.KeyStorePortWork;
 
 @Connector(
 	displayName="QBKeyStoreResourceAdapter",
@@ -47,6 +47,9 @@ public class QBKeyStoreResourceAdapter
 implements ResourceAdapter, Serializable
 {
 	private static final long serialVersionUID = 2235931909271428353L;
+	
+	private static final String DEFAULT_PORT = "6578";
+	private static final String DEFAULT_MAX_CONNECTIONS = "20";
 	private static final Logger logger;
 	
 	static
@@ -54,28 +57,75 @@ implements ResourceAdapter, Serializable
 		logger = Util.getPackageLogger();
 	}
 	
-	private WorkManager workManager;
-	private KeyStoreServiceWork serviceWork;
+	private String port;
+	private String maxConnections;
+	private KeyStorePortWork portWork;
 	
 	public QBKeyStoreResourceAdapter()
 	{
-		workManager = null;
-		serviceWork = null;
+		port = null;
+		maxConnections = null;
+		portWork = null;
+	}
+	
+	@ConfigProperty(
+		type=Integer.class,
+		defaultValue=DEFAULT_PORT
+	)
+	public String getPort()
+	{
+		return port;
+	}
+
+	public void setPort(String port)
+	{
+		this.port = port;
+	}
+	
+	@ConfigProperty(
+		type=Integer.class,
+		defaultValue=DEFAULT_MAX_CONNECTIONS
+	)
+	public String getMaxConnections()
+	{
+		return maxConnections;
+	}
+
+	public void setMaxConnections(String maxConnections)
+	{
+		this.maxConnections = maxConnections;
 	}
 
 	@Override
 	public void start(BootstrapContext ctx)
 	throws ResourceAdapterInternalException
 	{
-		workManager = ctx.getWorkManager();
-		logger.info("KeyStore resource adapter started");
+		try
+		{
+			logger.info("Starting KeyStore resource adapter");
+			
+			WorkManager workManager = ctx.getWorkManager();
+			int portValue = Integer.parseInt(port);
+			Integer maxConnectionsValue = maxConnections == null ? null
+					: Integer.parseInt(maxConnections);
+			portWork = new KeyStorePortWork(workManager, portValue,
+					maxConnectionsValue);
+			workManager.scheduleWork(portWork);
+		}
+		catch (Exception exception)
+		{
+			throw new ResourceAdapterInternalException(exception);
+		}
 	}
 
 	@Override
 	public void stop()
 	{
-		workManager = null;
-		logger.info("KeyStore resource adapter stopped");
+		logger.info("Stopping KeyStore resource adapter");
+		
+		// PRE portWork != null
+		portWork.release();
+		portWork = null;
 	}
 
 	@Override
@@ -83,27 +133,36 @@ implements ResourceAdapter, Serializable
 			ActivationSpec spec)
 	throws ResourceException
 	{
-		if (spec instanceof QBKeyStoreActivationSpec)
-		{
-			workManager.scheduleWork(new EndpointActivationWork(this,
-					(QBKeyStoreActivationSpec) spec, workManager,
-					endpointFactory));
-			spec.setResourceAdapter(this);
-		}
+		String listenerName = getListenerName(spec);
+		
 		StringBuilder msg = new StringBuilder();
-		msg.append("Incompatibe activation spec type ").append(spec.getClass());
-		throw new ResourceException(msg.toString());
+		msg.append("Activating endpoint ");
+		if (listenerName == null)
+			msg.append("without listener name");
+		else
+			msg.append("with listener name ").append(listenerName);
+		logger.info(msg.toString());
+		
+		// PRE portWork != null
+		portWork.updateEndpointFactory(listenerName, endpointFactory);
 	}
 	
 	@Override
 	public void endpointDeactivation(MessageEndpointFactory endpointFactory,
 			ActivationSpec spec)
 	{
-		if (spec instanceof QBKeyStoreActivationSpec && serviceWork != null)
-		{
-			serviceWork.release();
-			serviceWork = null;
-		}
+		String listenerName = getListenerName(spec);
+		
+		StringBuilder msg = new StringBuilder();
+		msg.append("Deactivating endpoint ");
+		if (listenerName == null)
+			msg.append("without listener name");
+		else
+			msg.append("with listener name ").append(listenerName);
+		logger.info(msg.toString());
+		
+		// PRE portWork != null
+		portWork.releaseEndpointFactory(listenerName, endpointFactory);
 	}
 
 	@Override
@@ -113,8 +172,16 @@ implements ResourceAdapter, Serializable
 		return null;
 	}
 	
-	public void setServiceWork(KeyStoreServiceWork serviceWork)
+	private static String getListenerName(ActivationSpec spec)
 	{
-		this.serviceWork = serviceWork;
+		if (spec instanceof QBKeyStoreActivationSpec)
+			return ((QBKeyStoreActivationSpec) spec).getListenerName();
+		
+		StringBuilder msg = new StringBuilder();
+		msg.append("Could not determine listener name for activation spec ");
+		msg.append("of type ").append(spec.getClass()).append(". ");
+		msg.append("Evaluating it as an empty listener name.");
+		logger.warning(msg.toString());
+		return null;
 	}
 }
