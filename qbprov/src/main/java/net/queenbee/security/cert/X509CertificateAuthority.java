@@ -49,7 +49,7 @@ extends CertificateAuthoritySpi
 	throws CertificateAuthorityException
 	{
 		X509CertificateProfile prof = profileCast(profile);
-		return signedCert(prof, prof.getSubject());
+		return signedCert(prof, prof.getSubject(), prof.getSubjectUniqueID());
 	}
 
 	@Override
@@ -59,11 +59,12 @@ extends CertificateAuthoritySpi
 	{
 		X509CertificateProfile prof = profileCast(profile);
 		X509Certificate cert = certificateCast(issuerCert);
-		return signedCert(prof, cert.getIssuerX500Principal());
+		return signedCert(prof, cert.getSubjectX500Principal(),
+				cert.getSubjectUniqueID());
 	}
 	
 	private X509Certificate signedCert(X509CertificateProfile profile,
-			X500Principal issuerPrincipal)
+			X500Principal issuerPrincipal, boolean[] issuerUniqueID)
 	throws CertificateAuthorityException
 	{
 		if (privateKey == null)
@@ -79,7 +80,7 @@ extends CertificateAuthoritySpi
 			cert.setNotBefore(profile.getNotBefore());
 			cert.setNotAfter(profile.getNotAfter());
 			cert.setDigestAlgorithm(profile.getDigestAlgorithm());
-			cert.setIssuerUniqueID(profile.getIssuerUniqueID());
+			cert.setIssuerUniqueID(issuerUniqueID);
 			cert.setSubjectUniqueID(profile.getSubjectUniqueID());
 			
 			Set<X509ExtensionEntry> extensions = new HashSet<>();
