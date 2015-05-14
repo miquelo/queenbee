@@ -17,9 +17,15 @@
 
 package net.queenbee.resource.keystore.work;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.Work;
+import javax.resource.spi.work.WorkManager;
 
 import net.queenbee.resource.keystore.util.Util;
 
@@ -33,17 +39,66 @@ implements Work
 		logger = Util.getPackageLogger();
 	}
 	
-	public KeyStoreListenerWork()
+	private WorkManager workManager;
+	private int port;
+	private Integer maxConnections;
+	private ServerSocket serverSocket;
+	private Map<String, MessageEndpointFactory> endpointFactoryMap;
+	
+	public KeyStoreListenerWork(WorkManager workManager, int port,
+			Integer maxConnections)
 	{
+		this.workManager = workManager;
+		this.port = port;
+		this.maxConnections = maxConnections;
+		serverSocket = null;
+		endpointFactoryMap = new HashMap<>();
 	}
 	
 	@Override
 	public void run()
 	{
+		try
+		{
+			serverSocket = newServerSocket();
+		}
+		catch (IOException exception)
+		{
+			logger.severe(exception.getMessage());
+		}
 	}
 
 	@Override
 	public void release()
 	{
+		try
+		{
+			// TODO Signal to listeners and connected proxies
+			serverSocket.close();
+		}
+		catch (IOException exception)
+		{
+			logger.severe(exception.getMessage());
+		}
+	}
+	
+	public void updateEndpointFactory(String listenerName,
+			MessageEndpointFactory endpointFactory)
+	{
+		// TODO ...
+	}
+	
+	public void releaseEndpointFactory(String listenerName,
+			MessageEndpointFactory endpointFactory)
+	{
+		// TODO ...
+	}
+	
+	private ServerSocket newServerSocket()
+	throws IOException
+	{
+		if (maxConnections == null)
+			return new ServerSocket(port);
+		return new ServerSocket(port, maxConnections);
 	}
 }

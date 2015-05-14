@@ -33,7 +33,7 @@ import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
 import net.queenbee.resource.keystore.util.Util;
-import net.queenbee.resource.keystore.work.KeyStorePortWork;
+import net.queenbee.resource.keystore.work.KeyStoreListenerWork;
 
 @Connector(
 	displayName="QBKeyStoreResourceAdapter",
@@ -59,13 +59,13 @@ implements ResourceAdapter, Serializable
 	
 	private String port;
 	private String maxConnections;
-	private KeyStorePortWork portWork;
+	private KeyStoreListenerWork listenerWork;
 	
 	public QBKeyStoreResourceAdapter()
 	{
 		port = null;
 		maxConnections = null;
-		portWork = null;
+		listenerWork = null;
 	}
 	
 	@ConfigProperty(
@@ -105,12 +105,9 @@ implements ResourceAdapter, Serializable
 			logger.info("Starting KeyStore resource adapter");
 			
 			WorkManager workManager = ctx.getWorkManager();
-			int portValue = Integer.parseInt(port);
-			Integer maxConnectionsValue = maxConnections == null ? null
-					: Integer.parseInt(maxConnections);
-			portWork = new KeyStorePortWork(workManager, portValue,
-					maxConnectionsValue);
-			workManager.scheduleWork(portWork);
+			listenerWork = new KeyStoreListenerWork(workManager, getPortValue(),
+					getMaxConnectionsValue());
+			workManager.scheduleWork(listenerWork);
 		}
 		catch (Exception exception)
 		{
@@ -124,8 +121,8 @@ implements ResourceAdapter, Serializable
 		logger.info("Stopping KeyStore resource adapter");
 		
 		// PRE portWork != null
-		portWork.release();
-		portWork = null;
+		listenerWork.release();
+		listenerWork = null;
 	}
 
 	@Override
@@ -133,36 +130,40 @@ implements ResourceAdapter, Serializable
 			ActivationSpec spec)
 	throws ResourceException
 	{
-		String listenerName = getListenerName(spec);
-		
-		StringBuilder msg = new StringBuilder();
-		msg.append("Activating endpoint ");
-		if (listenerName == null)
-			msg.append("without listener name");
-		else
-			msg.append("with listener name ").append(listenerName);
-		logger.info(msg.toString());
-		
-		// PRE portWork != null
-		portWork.updateEndpointFactory(listenerName, endpointFactory);
+		if (spec instanceof QBKeyStoreActivationSpec)
+		{
+			QBKeyStoreActivationSpec ksSpec = (QBKeyStoreActivationSpec) spec;
+			String listenerName = ksSpec.getListenerName();
+			
+			StringBuilder msg = new StringBuilder();
+			msg.append("Activating endpoint with listener name ");
+			msg.append(listenerName);
+			logger.info(msg.toString());
+			
+			// PRE portWork != null
+			listenerWork.updateEndpointFactory(listenerName, endpointFactory);
+		}
+		throw new ResourceException(unsupportedActivationSpec(spec));
 	}
 	
 	@Override
 	public void endpointDeactivation(MessageEndpointFactory endpointFactory,
 			ActivationSpec spec)
 	{
-		String listenerName = getListenerName(spec);
-		
-		StringBuilder msg = new StringBuilder();
-		msg.append("Deactivating endpoint ");
-		if (listenerName == null)
-			msg.append("without listener name");
-		else
-			msg.append("with listener name ").append(listenerName);
-		logger.info(msg.toString());
-		
-		// PRE portWork != null
-		portWork.releaseEndpointFactory(listenerName, endpointFactory);
+		if (spec instanceof QBKeyStoreActivationSpec)
+		{
+			QBKeyStoreActivationSpec ksSpec = (QBKeyStoreActivationSpec) spec;
+			String listenerName = ksSpec.getListenerName();
+			
+			StringBuilder msg = new StringBuilder();
+			msg.append("Deactivating endpoint with listener name ");
+			msg.append(listenerName);
+			logger.info(msg.toString());
+			
+			// PRE portWork != null
+			listenerWork.releaseEndpointFactory(listenerName, endpointFactory);
+		}
+		throw new IllegalStateException(unsupportedActivationSpec(spec));
 	}
 
 	@Override
@@ -172,16 +173,42 @@ implements ResourceAdapter, Serializable
 		return null;
 	}
 	
-	private static String getListenerName(ActivationSpec spec)
+	private int getPortValue()
+	throws ResourceAdapterInternalException
 	{
-		if (spec instanceof QBKeyStoreActivationSpec)
-			return ((QBKeyStoreActivationSpec) spec).getListenerName();
-		
+		try
+		{
+			return Integer.parseInt(port);
+		}
+		catch (Exception exception)
+		{
+			StringBuilder msg = new StringBuilder();
+			msg.append("Invalid port value: ").append(port);
+			throw new ResourceAdapterInternalException(msg.toString());
+		}
+	}
+	
+	private int getMaxConnectionsValue()
+	throws ResourceAdapterInternalException
+	{
+		try
+		{
+			return maxConnections == null ? null
+					: Integer.parseInt(maxConnections);
+		}
+		catch (Exception exception)
+		{
+			StringBuilder msg = new StringBuilder();
+			msg.append("Invalid max connections value: ").append(port);
+			throw new ResourceAdapterInternalException(msg.toString());
+		}
+	}
+	
+	private static String unsupportedActivationSpec(ActivationSpec spec)
+	{
 		StringBuilder msg = new StringBuilder();
-		msg.append("Could not determine listener name for activation spec ");
-		msg.append("of type ").append(spec.getClass()).append(". ");
-		msg.append("Evaluating it as an empty listener name.");
-		logger.warning(msg.toString());
-		return null;
+		msg.append("Unsupported activation spec of type ");
+		msg.append(spec.getClass());
+		return msg.toString();
 	}
 }
