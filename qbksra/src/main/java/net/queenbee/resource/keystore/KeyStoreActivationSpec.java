@@ -31,7 +31,7 @@ import net.queenbee.keystore.KeyStoreListener;
 @Activation(
 	messageListeners=KeyStoreListener.class
 )
-public class QBKeyStoreActivationSpec
+public class KeyStoreActivationSpec
 implements ActivationSpec, Serializable
 {
 	private static final long serialVersionUID = 5340132307487762015L;
@@ -39,7 +39,7 @@ implements ActivationSpec, Serializable
 	private ResourceAdapter ra;
 	private String listenerName;
 	
-	public QBKeyStoreActivationSpec()
+	public KeyStoreActivationSpec()
 	{
 		ra = null;
 		listenerName = null;

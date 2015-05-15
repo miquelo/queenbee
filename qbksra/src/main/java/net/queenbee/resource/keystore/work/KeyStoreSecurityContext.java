@@ -17,8 +17,8 @@
 
 package net.queenbee.resource.keystore.work;
 
+import java.io.Closeable;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,14 +35,14 @@ extends SecurityContext
 {
 	private static final long serialVersionUID = -4557446375146528380L;
 
-	private Socket socket;
+	private Closeable closeable;
 	private String keyStoreName;
 	private char[] password;
 	
-	public KeyStoreSecurityContext(Socket socket, String keyStoreName,
+	public KeyStoreSecurityContext(Closeable closeable, String keyStoreName,
 			char[] password)
 	{
-		this.socket = socket;
+		this.closeable = closeable;
 		this.keyStoreName = keyStoreName;
 		this.password = password;
 	}
@@ -69,7 +69,7 @@ extends SecurityContext
 			handler.handle(callbackList.toArray(callbacks));
 			
 			if (!pvc.getResult())
-				socket.close();
+				closeable.close();
 		}
 		catch (UnsupportedCallbackException exception)
 		{

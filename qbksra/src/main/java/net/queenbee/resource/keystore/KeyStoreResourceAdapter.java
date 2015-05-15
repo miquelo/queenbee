@@ -36,14 +36,14 @@ import net.queenbee.resource.keystore.util.Util;
 import net.queenbee.resource.keystore.work.PortWork;
 
 @Connector(
-	displayName="QBKeyStoreResourceAdapter",
-	description="QueenBee KeyStore Adapter",
+	displayName="QueenBee KeyStore Resource Adapter",
+	description="Resource adapter for QueenBee keystore endpoints",
 	vendorName="QueenBee",
 	eisType="QBKSRA",
 	version="0.1",
 	transactionSupport=TransactionSupportLevel.NoTransaction
 )
-public class QBKeyStoreResourceAdapter
+public class KeyStoreResourceAdapter
 implements ResourceAdapter, Serializable
 {
 	private static final long serialVersionUID = 2235931909271428353L;
@@ -61,7 +61,7 @@ implements ResourceAdapter, Serializable
 	private String maxConnections;
 	private PortWork portWork;
 	
-	public QBKeyStoreResourceAdapter()
+	public KeyStoreResourceAdapter()
 	{
 		port = null;
 		maxConnections = null;
@@ -130,9 +130,9 @@ implements ResourceAdapter, Serializable
 			ActivationSpec spec)
 	throws ResourceException
 	{
-		if (spec instanceof QBKeyStoreActivationSpec)
+		if (spec instanceof KeyStoreActivationSpec)
 		{
-			QBKeyStoreActivationSpec ksSpec = (QBKeyStoreActivationSpec) spec;
+			KeyStoreActivationSpec ksSpec = (KeyStoreActivationSpec) spec;
 			String listenerName = ksSpec.getListenerName();
 			
 			StringBuilder msg = new StringBuilder();
@@ -150,9 +150,9 @@ implements ResourceAdapter, Serializable
 	public void endpointDeactivation(MessageEndpointFactory endpointFactory,
 			ActivationSpec spec)
 	{
-		if (spec instanceof QBKeyStoreActivationSpec)
+		if (spec instanceof KeyStoreActivationSpec)
 		{
-			QBKeyStoreActivationSpec ksSpec = (QBKeyStoreActivationSpec) spec;
+			KeyStoreActivationSpec ksSpec = (KeyStoreActivationSpec) spec;
 			String listenerName = ksSpec.getListenerName();
 			
 			StringBuilder msg = new StringBuilder();

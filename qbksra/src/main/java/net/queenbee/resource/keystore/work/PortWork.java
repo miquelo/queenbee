@@ -21,10 +21,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import javax.resource.spi.UnavailableException;
+import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkException;
@@ -54,7 +56,7 @@ implements Work
 		this.port = port;
 		this.maxConnections = maxConnections;
 		serverSocket = null;
-		endpointFactoryMap = new HashMap<>();
+		endpointFactoryMap = new ConcurrentHashMap<>();
 	}
 	
 	@Override
@@ -76,7 +78,6 @@ implements Work
 	{
 		try
 		{
-			// TODO Signal to listeners and to connected proxies
 			serverSocket.close();
 		}
 		catch (IOException exception)
@@ -88,18 +89,36 @@ implements Work
 	public void endpointActivation(String listenerName,
 			MessageEndpointFactory endpointFactory)
 	{
-		// TODO ...
+		endpointFactoryMap.put(listenerName, endpointFactory);
 	}
 	
 	public void endpointDeactivation(String listenerName,
 			MessageEndpointFactory endpointFactory)
 	{
-		// TODO ...
+		endpointFactoryMap.remove(listenerName);
 	}
 	
 	public void createEndpointWork(String listenerName, String keyStoreName,
 			char[] password, Socket socket)
 	{
+		try
+		{
+			MessageEndpointFactory fact = endpointFactoryMap.get(listenerName);
+			if (fact == null)
+			{
+				// TODO Send listener not registered message to client
+			}
+			else
+			{
+				MessageEndpoint endpoint = fact.createEndpoint(null);
+				workManager.scheduleWork(new EndpointWork(endpoint,
+						keyStoreName, password, socket));
+			}
+		}
+		catch (WorkException | UnavailableException exception)
+		{
+			logger.severe(exception.getMessage());
+		}
 	}
 	
 	private ServerSocket newServerSocket()
