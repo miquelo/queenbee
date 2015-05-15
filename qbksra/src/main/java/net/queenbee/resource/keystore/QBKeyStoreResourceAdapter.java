@@ -33,7 +33,7 @@ import javax.resource.spi.work.WorkManager;
 import javax.transaction.xa.XAResource;
 
 import net.queenbee.resource.keystore.util.Util;
-import net.queenbee.resource.keystore.work.KeyStoreListenerWork;
+import net.queenbee.resource.keystore.work.PortWork;
 
 @Connector(
 	displayName="QBKeyStoreResourceAdapter",
@@ -59,13 +59,13 @@ implements ResourceAdapter, Serializable
 	
 	private String port;
 	private String maxConnections;
-	private KeyStoreListenerWork listenerWork;
+	private PortWork portWork;
 	
 	public QBKeyStoreResourceAdapter()
 	{
 		port = null;
 		maxConnections = null;
-		listenerWork = null;
+		portWork = null;
 	}
 	
 	@ConfigProperty(
@@ -105,9 +105,9 @@ implements ResourceAdapter, Serializable
 			logger.info("Starting KeyStore resource adapter");
 			
 			WorkManager workManager = ctx.getWorkManager();
-			listenerWork = new KeyStoreListenerWork(workManager, getPortValue(),
+			portWork = new PortWork(workManager, getPortValue(),
 					getMaxConnectionsValue());
-			workManager.scheduleWork(listenerWork);
+			workManager.scheduleWork(portWork);
 		}
 		catch (Exception exception)
 		{
@@ -121,8 +121,8 @@ implements ResourceAdapter, Serializable
 		logger.info("Stopping KeyStore resource adapter");
 		
 		// PRE portWork != null
-		listenerWork.release();
-		listenerWork = null;
+		portWork.release();
+		portWork = null;
 	}
 
 	@Override
@@ -141,7 +141,7 @@ implements ResourceAdapter, Serializable
 			logger.info(msg.toString());
 			
 			// PRE portWork != null
-			listenerWork.updateEndpointFactory(listenerName, endpointFactory);
+			portWork.endpointActivation(listenerName, endpointFactory);
 		}
 		throw new ResourceException(unsupportedActivationSpec(spec));
 	}
@@ -161,7 +161,7 @@ implements ResourceAdapter, Serializable
 			logger.info(msg.toString());
 			
 			// PRE portWork != null
-			listenerWork.releaseEndpointFactory(listenerName, endpointFactory);
+			portWork.endpointDeactivation(listenerName, endpointFactory);
 		}
 		throw new IllegalStateException(unsupportedActivationSpec(spec));
 	}

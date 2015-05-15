@@ -19,17 +19,20 @@ package net.queenbee.resource.keystore.work;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.Work;
+import javax.resource.spi.work.WorkException;
 import javax.resource.spi.work.WorkManager;
 
 import net.queenbee.resource.keystore.util.Util;
 
-public class KeyStoreListenerWork
+public class PortWork
 implements Work
 {
 	private static final Logger logger;
@@ -45,8 +48,7 @@ implements Work
 	private ServerSocket serverSocket;
 	private Map<String, MessageEndpointFactory> endpointFactoryMap;
 	
-	public KeyStoreListenerWork(WorkManager workManager, int port,
-			Integer maxConnections)
+	public PortWork(WorkManager workManager, int port, Integer maxConnections)
 	{
 		this.workManager = workManager;
 		this.port = port;
@@ -61,6 +63,7 @@ implements Work
 		try
 		{
 			serverSocket = newServerSocket();
+			while (acceptConnection());
 		}
 		catch (IOException exception)
 		{
@@ -73,7 +76,7 @@ implements Work
 	{
 		try
 		{
-			// TODO Signal to listeners and connected proxies
+			// TODO Signal to listeners and to connected proxies
 			serverSocket.close();
 		}
 		catch (IOException exception)
@@ -82,16 +85,21 @@ implements Work
 		}
 	}
 	
-	public void updateEndpointFactory(String listenerName,
+	public void endpointActivation(String listenerName,
 			MessageEndpointFactory endpointFactory)
 	{
 		// TODO ...
 	}
 	
-	public void releaseEndpointFactory(String listenerName,
+	public void endpointDeactivation(String listenerName,
 			MessageEndpointFactory endpointFactory)
 	{
 		// TODO ...
+	}
+	
+	public void createEndpointWork(String listenerName, String keyStoreName,
+			char[] password, Socket socket)
+	{
 	}
 	
 	private ServerSocket newServerSocket()
@@ -100,5 +108,23 @@ implements Work
 		if (maxConnections == null)
 			return new ServerSocket(port);
 		return new ServerSocket(port, maxConnections);
+	}
+	
+	private boolean acceptConnection()
+	{
+		try
+		{
+			workManager.scheduleWork(new CreateEndpointWork(this,
+					serverSocket.accept()));
+			return true;
+		}
+		catch (SocketTimeoutException | WorkException exception)
+		{
+			return true;
+		}
+		catch (IOException exception)
+		{
+			return false;
+		}
 	}
 }

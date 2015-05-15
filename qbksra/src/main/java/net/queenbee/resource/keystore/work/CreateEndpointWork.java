@@ -17,13 +17,14 @@
 
 package net.queenbee.resource.keystore.work;
 
+import java.net.Socket;
 import java.util.logging.Logger;
 
 import javax.resource.spi.work.Work;
 
 import net.queenbee.resource.keystore.util.Util;
 
-public class KeyStoreEndpointWork
+public class CreateEndpointWork
 implements Work
 {
 	private static final Logger logger;
@@ -33,14 +34,26 @@ implements Work
 		logger = Util.getPackageLogger();
 	}
 	
-	public KeyStoreEndpointWork()
+	private PortWork portWork;
+	private Socket socket;
+	
+	public CreateEndpointWork(PortWork portWork, Socket socket)
 	{
+		this.portWork = portWork;
+		this.socket = socket;
 	}
 	
 	@Override
 	public void run()
 	{
-		logger.info("Running keystore endpoint");
+		logger.info("Creating endpoint work");
+		
+		// TODO Retrieve listenerName, keyStoreName and password from socket
+		String listenerName = null;
+		String keyStoreName = null;
+		char[] password = null;
+		portWork.createEndpointWork(listenerName, keyStoreName, password,
+				socket);
 	}
 
 	@Override

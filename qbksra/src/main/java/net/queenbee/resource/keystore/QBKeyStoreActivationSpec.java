@@ -75,7 +75,7 @@ implements ActivationSpec, Serializable
 	public void validate()
 	throws InvalidPropertyException
 	{
-		if (listenerName == null)
+		if (listenerName == null || listenerName.isEmpty())
 		{
 			String msg = "Listener name must not be empty";
 			throw new InvalidPropertyException(msg);
