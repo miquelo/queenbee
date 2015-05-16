@@ -18,6 +18,7 @@
 package net.queenbee.resource.keystore.work;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -25,19 +26,23 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import javax.resource.spi.UnavailableException;
-import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkException;
 import javax.resource.spi.work.WorkManager;
 
+import net.queenbee.asn1.ASN1Class;
+import net.queenbee.asn1.ASN1Tag;
+import net.queenbee.asn1.io.BEREncodingException;
+import net.queenbee.asn1.io.BEROutputStream;
 import net.queenbee.resource.keystore.util.Util;
 
 public class PortWork
 implements Work
 {
 	private static final Logger logger;
+	
+	private static final int CODE_UNAVAILABLE_LISTENER = 1;
 	
 	static
 	{
@@ -104,18 +109,14 @@ implements Work
 		try
 		{
 			MessageEndpointFactory fact = endpointFactoryMap.get(listenerName);
-			if (fact == null)
-			{
-				// TODO Send listener not registered message to client
-			}
+			if (fact != null)
+				workManager.scheduleWork(new EndpointWork(
+						fact.createEndpoint(null), keyStoreName, password,
+						socket));
 			else
-			{
-				MessageEndpoint endpoint = fact.createEndpoint(null);
-				workManager.scheduleWork(new EndpointWork(endpoint,
-						keyStoreName, password, socket));
-			}
+				sendUnavailableEndpointMessage(listenerName, socket);
 		}
-		catch (WorkException | UnavailableException exception)
+		catch (Exception exception)
 		{
 			logger.severe(exception.getMessage());
 		}
@@ -144,6 +145,32 @@ implements Work
 		catch (IOException exception)
 		{
 			return false;
+		}
+	}
+	
+	private static void sendUnavailableEndpointMessage(String listenerName,
+			Socket socket)
+	throws IOException
+	{
+		try (BEROutputStream out = new BEROutputStream(
+				socket.getOutputStream()))
+		{
+			out.writeTag(new ASN1Tag(ASN1Class.UNIVERSAL, ASN1Tag.TN_SEQUENCE,
+					true));
+			
+			out.writeInteger(BigInteger.valueOf(CODE_UNAVAILABLE_LISTENER));
+			out.conclude(true);
+			
+			StringBuilder msg = new StringBuilder();
+			msg.append("Unavailable listener ").append(listenerName);
+			out.writeIA5String(msg.toString());
+			out.conclude(true);
+			
+			out.conclude(true);
+		}
+		catch (IOException | BEREncodingException exception)
+		{
+			logger.severe(exception.getMessage());
 		}
 	}
 }
