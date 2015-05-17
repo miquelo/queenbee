@@ -17,7 +17,6 @@
 
 package net.queenbee.resource.keystore.work;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Logger;
@@ -59,7 +58,7 @@ implements Work
 		}
 		catch (IOException exception)
 		{
-			tryClose(socket);
+			Util.tryClose(socket);
 			logger.severe(exception.getMessage());
 		}
 	}
@@ -115,18 +114,6 @@ implements Work
 		catch (BEREncodingException exception)
 		{
 			throw new IOException(exception);
-		}
-	}
-	
-	private static void tryClose(Closeable closeable)
-	{
-		try
-		{
-			closeable.close();
-		}
-		catch (IOException exception)
-		{
-			logger.severe(exception.getMessage());
 		}
 	}
 }

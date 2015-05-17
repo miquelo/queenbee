@@ -18,6 +18,13 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+javadoc {
+	title('QueenBee KeyStore Listener')
+	options {
+		links('http://docs.oracle.com/javase/7/docs/api/')
+	}
+}
+
 eclipse {
 	project {
 		name = 'queenbee-qbks'

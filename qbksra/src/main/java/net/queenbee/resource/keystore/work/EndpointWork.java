@@ -18,24 +18,29 @@
 package net.queenbee.resource.keystore.work;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.resource.ResourceException;
 import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.work.Work;
 import javax.resource.spi.work.WorkContext;
 import javax.resource.spi.work.WorkContextProvider;
 
+import net.queenbee.asn1.io.BEREncodingException;
+import net.queenbee.keystore.KeyStoreInfo;
 import net.queenbee.resource.keystore.util.Util;
 
 public class EndpointWork
 implements Work, WorkContextProvider
 {
 	private static final long serialVersionUID = -6648066241045476777L;
+	
+	private static final String METHOD_GET_INFO = "getInfo";
 	
 	private static final Logger logger;
 	
@@ -64,13 +69,14 @@ implements Work, WorkContextProvider
 		{
 			logger.info("Running endpoint work");
 			
-			InputStream in = socket.getInputStream();
 			OutputStream out = socket.getOutputStream();
 			
-			// TODO Request keystore info, causing security check
+			writeResponse(out, endpointCall(KeyStoreInfo.class,
+					METHOD_GET_INFO));
 		}
-		catch (IOException exception)
+		catch (Exception exception)
 		{
+			Util.tryClose(socket);
 		}
 	}
 
@@ -83,5 +89,45 @@ implements Work, WorkContextProvider
 	public List<WorkContext> getWorkContexts()
 	{
 		return Arrays.<WorkContext>asList(securityContext);
+	}
+	
+	private <T> T endpointCall(Class<T> returnType, String methodName,
+			Object... params)
+	throws ResourceException
+	{
+		Method method = null;
+		
+		try
+		{
+			Class<?> type = endpoint.getClass();
+			Class<?>[] parameterTypes = new Class<?>[params.length];
+			for (int i = 0; i < params.length; ++i)
+				parameterTypes[i] = params[i].getClass();
+			method = type.getDeclaredMethod(methodName, parameterTypes);
+		}
+		catch (Exception exception)
+		{
+			throw new ResourceException(exception);
+		}
+		
+		try
+		{
+			endpoint.beforeDelivery(method);
+			return returnType.cast(method.invoke(endpoint, params));
+		}
+		catch (Exception exception)
+		{
+			throw new ResourceException(exception);
+		}
+		finally
+		{
+			endpoint.afterDelivery();
+		}
+	}
+	
+	private void writeResponse(OutputStream out, KeyStoreInfo keyStoreInfo)
+	throws IOException, BEREncodingException
+	{
+		// TODO ...
 	}
 }

@@ -18,10 +18,17 @@
 package net.queenbee.keystore;
 
 /**
- * Listener for QueenBee distributed key store.
+ * Listener for QueenBee distributed keystore.
  * 
  * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
  */
 public interface KeyStoreListener
 {
+	/**
+	 * Returns source keystore basic information.
+	 * 
+	 * @return
+	 * 			The keystore information.
+	 */
+	public KeyStoreInfo getInfo();
 }

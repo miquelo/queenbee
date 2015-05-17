@@ -15,40 +15,47 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.queenbee.resource.keystore.util;
+package net.queenbee.keystore;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.logging.Logger;
+import java.io.Serializable;
+import java.util.Date;
 
-public class Util
+/**
+ * Keystore basic information.
+ * 
+ * @author Miquel A. Ferran &lt;miquel.ferran.gonzalez@gmail.com&gt;
+ */
+public class KeyStoreInfo
+implements Serializable
 {
-	private static final String PACKAGE_NAME;
+	private static final long serialVersionUID = 4796724782203669975L;
 	
-	static
+	private Date creationDate;
+	
+	/**
+	 * Empty constructor.
+	 */
+	public KeyStoreInfo()
 	{
-		PACKAGE_NAME = "net.queenbee.resource.keystore";
+		creationDate = null;
 	}
-	
-	private Util()
+
+	/**
+	 * Date when this keystore was created.
+	 */
+	public Date getCreationDate()
 	{
+		return creationDate;
 	}
-	
-	public static Logger getPackageLogger()
+
+	/**
+	 * Set the date when this keystore was created.
+	 * 
+	 * @param creationDate
+	 * 			The new creation date.
+	 */
+	public void setCreationDate(Date creationDate)
 	{
-		return Logger.getLogger(PACKAGE_NAME);
-	}
-	
-	public static boolean tryClose(Closeable closeable)
-	{
-		try
-		{
-			closeable.close();
-			return true;
-		}
-		catch (IOException exception)
-		{
-			return false;
-		}
+		this.creationDate = creationDate;
 	}
 }
