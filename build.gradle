@@ -16,3 +16,9 @@
  */
 
 apply plugin: 'eclipse'
+
+eclipse {
+	project {
+		name = 'queenbee'
+	}
+}
