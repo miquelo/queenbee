@@ -15,13 +15,20 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-include \
-'asn1',
-'caappserv',
-'cacore',
-'cadb',
-'caserv',
-'qbks',
-'qbksp',
-'qbksra',
-'qbprov'
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath('se.transmode.gradle:gradle-docker:1.2')
+	}
+}
+
+apply plugin: 'docker'
+apply plugin: 'eclipse'
+
+eclipse {
+	project {
+		name = 'queenbee-caappserv'
+	}
+}
