@@ -17,6 +17,7 @@
  
 include \
 'asn1',
+'cacore',
 'caserv',
 'qbks',
 'qbksp',
