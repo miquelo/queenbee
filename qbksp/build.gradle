@@ -18,6 +18,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+def moduleName = 'qbksp'
+def projectName = "${groupName}-${moduleName}"
+
 dependencies {
 	compile project(':asn1')
 	compile project(':caserv')
@@ -25,6 +28,6 @@ dependencies {
 
 eclipse {
 	project {
-		name = 'queenbee-qbksp'
+		name = "${projectName}"
 	}
 }

@@ -27,8 +27,19 @@ buildscript {
 apply plugin: 'docker'
 apply plugin: 'eclipse'
 
+def moduleName = 'caappserv'
+def projectName = "${groupName}-${moduleName}"
+
+docker {
+	baseImage 'java:7'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+	applicationName = "${projectName}"
+}
+
 eclipse {
 	project {
-		name = 'queenbee-caappserv'
+		name = "${projectName}"
 	}
 }

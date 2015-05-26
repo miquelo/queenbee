@@ -17,8 +17,11 @@
 
 apply plugin: 'eclipse'
 
+ext.groupName = 'queenbee'
+def projectName = "${ext.groupName}"
+
 eclipse {
 	project {
-		name = 'queenbee'
+		name = "${projectName}"
 	}
 }

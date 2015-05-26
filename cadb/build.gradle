@@ -27,8 +27,11 @@ buildscript {
 apply plugin: 'docker'
 apply plugin: 'eclipse'
 
+def moduleName = 'cadb'
+def projectName = "${groupName}-${moduleName}"
+
 eclipse {
 	project {
-		name = 'queenbee-cadb'
+		name = "${projectName}"
 	}
 }

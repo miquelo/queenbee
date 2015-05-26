@@ -18,6 +18,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+def moduleName = 'qbksra'
+def projectName = "${groupName}-${moduleName}"
+
 repositories {
 	mavenCentral()
 }
@@ -60,7 +63,7 @@ processResources.dependsOn copyDependencies
 
 eclipse {
 	project {
-		name = 'queenbee-qbksra'
+		name = "${projectName}"
 	}
 	classpath {
 		plusConfigurations += [ configurations.provided ]

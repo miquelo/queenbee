@@ -16,7 +16,10 @@
  */
  
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'eclipse'ç
+
+def moduleName = 'caserv'
+def projectName = "${groupName}-${moduleName}"
 
 javadoc {
 	title('CA Services')
@@ -27,6 +30,6 @@ javadoc {
 
 eclipse {
 	project {
-		name = 'queenbee-caserv'
+		name = "${projectName}"
 	}
 }

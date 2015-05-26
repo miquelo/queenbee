@@ -18,6 +18,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+def moduleName = 'asn1'
+def projectName = "${groupName}-${moduleName}"
+
 javadoc {
 	title('ASN.1')
 	options {
@@ -27,6 +30,6 @@ javadoc {
 
 eclipse {
 	project {
-		name = 'queenbee-asn1'
+		name = "${projectName}"
 	}
 }

@@ -18,6 +18,9 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+def moduleName = 'qbks'
+def projectName = "${groupName}-${moduleName}"
+
 javadoc {
 	title('QueenBee KeyStore Listener')
 	options {
@@ -27,6 +30,6 @@ javadoc {
 
 eclipse {
 	project {
-		name = 'queenbee-qbks'
+		name = "${projectName}"
 	}
 }
