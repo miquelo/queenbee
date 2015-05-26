@@ -16,7 +16,7 @@
  */
  
 apply plugin: 'java'
-apply plugin: 'eclipse'ç
+apply plugin: 'eclipse'
 
 def moduleName = 'caserv'
 def projectName = "${groupName}-${moduleName}"
