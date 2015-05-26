@@ -23,7 +23,10 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.MessageDrivenContext;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+import net.queenbee.ca.core.model.CAKeyStore;
 import net.queenbee.keystore.KeyStoreInfo;
 import net.queenbee.keystore.KeyStoreListener;
 
@@ -41,6 +44,11 @@ implements KeyStoreListener
 	@Inject
 	private MessageDrivenContext context;
 	
+	@PersistenceContext(
+		unitName="CAUnit"
+	)
+	private EntityManager em;
+	
 	public CAKeyStoreListenerBean()
 	{
 		context = null;
@@ -49,7 +57,11 @@ implements KeyStoreListener
 	@Override
 	public KeyStoreInfo getInfo()
 	{
-		return null;
+		String keyStoreName = getKetStoreName();
+		CAKeyStore keyStore = em.find(CAKeyStore.class, keyStoreName);
+		KeyStoreInfo info = new KeyStoreInfo();
+		info.setCreationDate(keyStore.getCreationDate());
+		return info;
 	}
 	
 	private String getKetStoreName()
