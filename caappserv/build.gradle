@@ -41,6 +41,13 @@ task dockerBuild(type: Docker) {
 	description "Build the Docker image"
 	applicationName = "${moduleName}"
 	runCommand "wget ${glassfishDownloadURL}"
+	runCommand "unzip glassfish-4.1.zip"
+	entryPoint([
+		'sh',
+		'glassfish4/bin/asadmin',
+		'start-domain',
+		'--verbose'
+	])
 }
 
 eclipse {
