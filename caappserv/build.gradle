@@ -30,12 +30,17 @@ apply plugin: 'eclipse'
 def moduleName = 'caappserv'
 def projectName = "${groupName}-${moduleName}"
 
+def glassfishDownloadURL = 'http://download.java.net/glassfish/4.1/release/' +
+		'glassfish-4.1.zip'
+
 docker {
 	baseImage 'java:7'
 }
 
-task buildDocker(type: Docker) {
-	applicationName = "${projectName}"
+task dockerBuild(type: Docker) {
+	description "Build the Docker image"
+	applicationName = "${moduleName}"
+	runCommand "wget ${glassfishDownloadURL}"
 }
 
 eclipse {
