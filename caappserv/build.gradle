@@ -29,21 +29,18 @@ apply plugin: 'eclipse'
 
 def moduleName = "${parentModuleName}-${project.name}"
 
-def glassfishDownloadURL = 'http://download.java.net/glassfish/4.1/release/' +
-		'glassfish-4.1.zip'
-
 docker {
 	baseImage 'java:7'
 }
 
 task dockerBuild(type: Docker) {
 	description "Build the Docker image"
-	applicationName = "${moduleName}"
-	runCommand "wget ${glassfishDownloadURL}"
-	runCommand "unzip glassfish-4.1.zip"
+	applicationName = "${project.name}"
+	addFile 'src/main/sh/glassfish-install.sh', 'glassfish-install.sh'
+	runCommand 'sh glassfish-install.sh'
+	runCommand 'rm glassfish-install.sh'
 	entryPoint([
-		'sh',
-		'glassfish4/bin/asadmin',
+		'asadmin',
 		'start-domain',
 		'--verbose'
 	])
