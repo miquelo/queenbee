@@ -17,12 +17,12 @@
 
 apply plugin: 'eclipse'
 
-ext.groupName = 'queenbee'
-def projectName = "${ext.groupName}"
+def moduleName = 'queenbee'
+ext.parentModuleName = "${moduleName}"
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }
 

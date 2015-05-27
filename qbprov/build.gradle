@@ -18,8 +18,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-def moduleName = 'qbprov'
-def projectName = "${groupName}-${moduleName}"
+def moduleName = "${parentModuleName}-${project.name}"
 
 dependencies {
 	compile project(':asn1')
@@ -67,6 +66,6 @@ task signerSignJar(type: Exec) {
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }

@@ -18,8 +18,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-def moduleName = 'caserv'
-def projectName = "${groupName}-${moduleName}"
+def moduleName = "${parentModuleName}-${project.name}"
 
 javadoc {
 	title('CA Services')
@@ -30,6 +29,6 @@ javadoc {
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }

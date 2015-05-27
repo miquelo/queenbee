@@ -27,8 +27,7 @@ buildscript {
 apply plugin: 'docker'
 apply plugin: 'eclipse'
 
-def moduleName = 'caappserv'
-def projectName = "${groupName}-${moduleName}"
+def moduleName = "${parentModuleName}-${project.name}"
 
 def glassfishDownloadURL = 'http://download.java.net/glassfish/4.1/release/' +
 		'glassfish-4.1.zip'
@@ -52,6 +51,6 @@ task dockerBuild(type: Docker) {
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }

@@ -18,8 +18,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
-def moduleName = 'qbks'
-def projectName = "${groupName}-${moduleName}"
+def moduleName = "${parentModuleName}-${project.name}"
 
 javadoc {
 	title('QueenBee KeyStore Listener')
@@ -30,6 +29,6 @@ javadoc {
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }

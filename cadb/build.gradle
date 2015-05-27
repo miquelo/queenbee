@@ -27,11 +27,10 @@ buildscript {
 apply plugin: 'docker'
 apply plugin: 'eclipse'
 
-def moduleName = 'cadb'
-def projectName = "${groupName}-${moduleName}"
+def moduleName = "${parentModuleName}-${project.name}"
 
 eclipse {
 	project {
-		name = "${projectName}"
+		name = "${moduleName}"
 	}
 }
