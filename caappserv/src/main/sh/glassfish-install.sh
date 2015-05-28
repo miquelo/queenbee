@@ -21,4 +21,4 @@ unzip glassfish-4.1.zip
 rm glassfish-4.1.zip
 
 cp -R glassfish4/* /
-rm -r glassfish4
+rm -r glassfish4 README.txt 
