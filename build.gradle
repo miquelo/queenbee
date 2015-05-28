@@ -17,8 +17,7 @@
 
 apply plugin: 'eclipse'
 
-def moduleName = 'queenbee'
-ext.parentModuleName = "${moduleName}"
+project.set('moduleName', 'queenbee')
 
 eclipse {
 	project {
