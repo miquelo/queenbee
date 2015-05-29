@@ -16,17 +16,10 @@
  */
  
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 project.set('moduleName', "${parent.moduleName}-${project.name}")
 
 dependencies {
 	compile project(':asn1')
 	compile project(':caserv')
-}
-
-eclipse {
-	project {
-		name = "${moduleName}"
-	}
 }

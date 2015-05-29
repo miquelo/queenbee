@@ -19,9 +19,29 @@ apply plugin: 'eclipse'
 
 project.set('moduleName', 'queenbee')
 
-eclipse {
-	project {
-		name = "${moduleName}"
+allprojects {
+	configurations {
+		provided
+	}
+	if (project.plugins.hasPlugin('Java')) {
+		sourceSets {
+			main {
+				compileClasspath += configurations.provided
+				runtimeClasspath += configurations.provided
+			}
+			test {
+				compileClasspath += configurations.provided
+				runtimeClasspath += configurations.provided
+			}
+		}
+		javadoc {
+			classpath += configurations.provided
+		}
+	}
+	eclipse {
+		project {
+			name = "${moduleName}"
+		}
 	}
 }
 

@@ -25,7 +25,6 @@ buildscript {
 }
 
 apply plugin: 'docker'
-apply plugin: 'eclipse'
 
 project.set('moduleName', "${parent.moduleName}-${project.name}")
 
@@ -44,10 +43,4 @@ task dockerBuild(type: Docker) {
 		'start-domain',
 		'--verbose'
 	])
-}
-
-eclipse {
-	project {
-		name = "${moduleName}"
-	}
 }

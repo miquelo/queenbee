@@ -16,7 +16,6 @@
  */
  
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 project.set('moduleName', "${parent.moduleName}-${project.name}")
 
@@ -62,10 +61,4 @@ task signerSignJar(type: Exec) {
 		"${libsDir}/qbprov.jar",
 		'signer'
 	standardOutput = new ByteArrayOutputStream()
-}
-
-eclipse {
-	project {
-		name = "${moduleName}"
-	}
 }

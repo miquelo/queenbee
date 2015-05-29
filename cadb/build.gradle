@@ -25,12 +25,5 @@ buildscript {
 }
 
 apply plugin: 'docker'
-apply plugin: 'eclipse'
 
 project.set('moduleName', "${parent.moduleName}-${project.name}")
-
-eclipse {
-	project {
-		name = "${moduleName}"
-	}
-}

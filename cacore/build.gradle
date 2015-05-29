@@ -16,27 +16,11 @@
  */
  
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 project.set('moduleName', "${parent.moduleName}-${project.name}")
 
 repositories {
 	mavenCentral()
-}
-
-configurations {
-	provided
-}
- 
-sourceSets {
-	main {
-		compileClasspath += configurations.provided
-		runtimeClasspath += configurations.provided
-	}
-	test {
-		compileClasspath += configurations.provided
-		runtimeClasspath += configurations.provided
-	}
 }
 
 dependencies {
@@ -49,17 +33,4 @@ task copyDependencies(type: Copy) {
 	from configurations.compile + configurations.runtime
 }
 
-javadoc {
-	classpath += configurations.provided
-}
-
 processResources.dependsOn copyDependencies
-
-eclipse {
-	project {
-		name = "${moduleName}"
-	}
-	classpath {
-		plusConfigurations += [ configurations.provided ]
-	}
-}
