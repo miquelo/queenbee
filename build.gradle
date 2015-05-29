@@ -15,9 +15,10 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-allprojects {
-	apply plugin: 'eclipse'
-	
+project.set('moduleName', "${project.name}");
+
+configure(subprojects) {
+	project.set('moduleName', "${project.parent.moduleName}-${project.name}");
 	configurations {
 		provided
 	}
@@ -38,10 +39,11 @@ allprojects {
 	}
 }
 
-subprojects.each {
+configure(allprojects) {
+	apply plugin: 'eclipse'
 	eclipse {
 		project {
-			name = "queenbee-${project.name}"
+			name = "${moduleName}"
 		}
 	}
 }
@@ -49,3 +51,4 @@ subprojects.each {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
+
