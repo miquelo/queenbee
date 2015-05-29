@@ -15,14 +15,14 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-project.set('moduleName', "${project.name}");
+set('moduleName', "${project.name}");
 
 configure(subprojects) {
-	project.set('moduleName', "${project.parent.moduleName}-${project.name}");
+	set('moduleName', "${project.parent.moduleName}-${project.name}");
 	configurations {
 		provided
 	}
-	if (project.plugins.hasPlugin('Java')) {
+	if (hasProperty('sourceSets')) {
 		sourceSets {
 			main {
 				compileClasspath += configurations.provided
@@ -51,4 +51,3 @@ configure(allprojects) {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
-
