@@ -15,11 +15,11 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'eclipse'
-
 project.set('moduleName', 'queenbee')
 
 allprojects {
+	apply plugin: 'eclipse'
+	
 	configurations {
 		provided
 	}
