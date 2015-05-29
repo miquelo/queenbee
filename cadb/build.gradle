@@ -25,5 +25,3 @@ buildscript {
 }
 
 apply plugin: 'docker'
-
-project.set('moduleName', "${parent.moduleName}-${project.name}")

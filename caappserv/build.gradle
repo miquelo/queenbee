@@ -26,8 +26,6 @@ buildscript {
 
 apply plugin: 'docker'
 
-project.set('moduleName', "${parent.moduleName}-${project.name}")
-
 docker {
 	baseImage 'java:7'
 }

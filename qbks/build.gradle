@@ -17,8 +17,6 @@
  
 apply plugin: 'java'
 
-project.set('moduleName', "${parent.moduleName}-${project.name}")
-
 javadoc {
 	title('QueenBee KeyStore Listener')
 	options {

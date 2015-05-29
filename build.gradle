@@ -15,8 +15,6 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-project.set('moduleName', 'queenbee')
-
 allprojects {
 	apply plugin: 'eclipse'
 	
@@ -38,9 +36,12 @@ allprojects {
 			classpath += configurations.provided
 		}
 	}
+}
+
+subprojects.each {
 	eclipse {
 		project {
-			name = "${moduleName}"
+			name = "queenbee-${project.name}"
 		}
 	}
 }
