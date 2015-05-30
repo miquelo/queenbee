@@ -21,19 +21,38 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	provided
+}
+
 dependencies {
 	compile project(':asn1')
 	compile project(':qbks')
 	provided 'javax:javaee-api:7.0'
 }
 
-task copyDependencies(type: Copy) {
-	into "$sourceSets.main.output.resourcesDir"
-	from configurations.compile + configurations.runtime
+sourceSets {
+	main {
+		compileClasspath += configurations.provided
+		runtimeClasspath += configurations.provided
+	}
+	test {
+		compileClasspath += configurations.provided
+		runtimeClasspath += configurations.provided
+	}
 }
 
 jar {
 	extension="rar"
+}
+
+javadoc {
+	classpath += configurations.provided
+}
+
+task copyDependencies(type: Copy) {
+	into "${sourceSets.main.output.resourcesDir}"
+	from configurations.compile + configurations.runtime
 }
 
 processResources.dependsOn copyDependencies
