@@ -58,6 +58,15 @@ configure(allprojects) {
 					plusConfigurations += [ configurations.provided ]
 				}
 			}
+			
+			if (jar.extension == 'rar') {
+				println "Include dependencies on module ${moduleName}"
+				task includeDependencies(type: Copy) {
+					into "${sourceSets.main.output.resourcesDir}"
+					from configurations.compile + configurations.runtime
+				}
+				processResources.dependsOn includeDependencies
+			}
 		}
 	}
 }

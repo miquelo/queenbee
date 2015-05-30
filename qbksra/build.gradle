@@ -28,12 +28,5 @@ dependencies {
 }
 
 jar {
-	extension="rar"
+	extension = 'rar'
 }
-
-task copyDependencies(type: Copy) {
-	into "${sourceSets.main.output.resourcesDir}"
-	from configurations.compile + configurations.runtime
-}
-
-processResources.dependsOn copyDependencies
