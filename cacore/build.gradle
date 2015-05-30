@@ -25,3 +25,7 @@ dependencies {
 	compile project(':qbks')
 	provided 'javax:javaee-api:7.0'
 }
+
+javadoc {
+	title('CA Core')
+}

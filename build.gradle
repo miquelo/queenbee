@@ -50,6 +50,9 @@ configure(allprojects) {
 			}
 			
 			javadoc {
+				options {
+					links('http://docs.oracle.com/javase/7/docs/api/')
+				}
 				classpath += configurations.provided
 			}
 			
@@ -60,7 +63,6 @@ configure(allprojects) {
 			}
 			
 			if (jar.extension == 'rar') {
-				println "Include dependencies on module ${moduleName}"
 				task includeDependencies(type: Copy) {
 					into "${sourceSets.main.output.resourcesDir}"
 					from configurations.compile + configurations.runtime
