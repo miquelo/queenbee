@@ -62,6 +62,16 @@ configure(allprojects) {
 				}
 			}
 			
+			// Only aggregates Javadocs with custom title
+			if (javadoc.title != "${name} API") {
+				rootProject.tasks.javadocs {
+					source += files(sourceSets.collect {
+						srcSet -> srcSet.allJava
+					})
+					classpath += files(sourceSets*.compileClasspath)
+				}
+			}
+			
 			if (jar.extension == 'rar') {
 				task includeDependencies(type: Copy) {
 					into "${sourceSets.main.output.resourcesDir}"
@@ -71,6 +81,11 @@ configure(allprojects) {
 			}
 		}
 	}
+}
+
+task javadocs(type: Javadoc) {
+	title = 'QueenBee API'
+	destinationDir = new File("${buildDir}/docs/javadoc")
 }
 
 task wrapper(type: Wrapper) {

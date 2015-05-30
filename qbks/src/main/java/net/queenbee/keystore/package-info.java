@@ -14,14 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-apply plugin: 'java'
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	compile project(':qbks')
-	provided 'javax:javaee-api:7.0'
-}
+/**
+ * Package for KeyStore Listener.
+ */
+package net.queenbee.keystore;
