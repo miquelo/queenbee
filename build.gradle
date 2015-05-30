@@ -23,9 +23,24 @@ configure(subprojects) {
 
 configure(allprojects) {
 	apply plugin: 'eclipse'
+	
 	eclipse {
 		project {
 			name = "${moduleName}"
+		}
+	}
+	
+	afterEvaluate {
+		if (plugins.hasPlugin(JavaPlugin)) {
+			configurations {
+				provided
+			}
+			
+			eclipse {
+				classpath {
+					plusConfigurations += [ configurations.provided ]
+				}
+			}
 		}
 	}
 }
