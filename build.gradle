@@ -30,12 +30,14 @@ configure(allprojects) {
 		}
 	}
 	
+	beforeEvaluate {
+		configurations {
+			provided
+		}
+	}
+	
 	afterEvaluate {
 		if (plugins.hasPlugin(JavaPlugin)) {
-			configurations {
-				provided
-			}
-			
 			sourceSets {
 				main {
 					compileClasspath += configurations.provided

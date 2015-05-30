@@ -21,10 +21,6 @@ repositories {
 	mavenCentral()
 }
 
-configurations {
-	provided
-}
-
 dependencies {
 	compile project(':qbks')
 	provided 'javax:javaee-api:7.0'

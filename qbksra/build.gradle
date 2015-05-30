@@ -21,10 +21,6 @@ repositories {
 	mavenCentral()
 }
 
-configurations {
-	provided
-}
-
 dependencies {
 	compile project(':asn1')
 	compile project(':qbks')
