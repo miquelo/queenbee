@@ -28,6 +28,7 @@ apply plugin: 'docker'
 
 docker {
 	baseImage 'java:7'
+	useApi = true
 }
 
 task dockerBuild(type: Docker) {
