@@ -15,6 +15,8 @@
  * along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+rootProject.name = 'queenbee'
+
 include \
 'asn1',
 'caappserv',
