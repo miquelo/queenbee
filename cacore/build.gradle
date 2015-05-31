@@ -22,6 +22,6 @@ repositories {
 }
 
 dependencies {
-	compile project(':qbks')
+	include project(':qbks')
 	provided 'javax:javaee-api:7.0'
 }

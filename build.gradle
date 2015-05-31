@@ -32,6 +32,7 @@ configure(allprojects) {
 	
 	beforeEvaluate {
 		configurations {
+			include
 			provided
 		}
 	}
@@ -40,12 +41,23 @@ configure(allprojects) {
 		if (plugins.hasPlugin(JavaPlugin)) {
 			sourceSets {
 				main {
+					compileClasspath += configurations.include
 					compileClasspath += configurations.provided
+					runtimeClasspath += configurations.include
 					runtimeClasspath += configurations.provided
 				}
 				test {
+					compileClasspath += configurations.include
 					compileClasspath += configurations.provided
+					runtimeClasspath += configurations.include
 					runtimeClasspath += configurations.provided
+				}
+			}
+			
+			jar {
+				from sourceSets.main.output
+				from configurations.include.collect {
+					it.isDirectory() ? it : zipTree(it)
 				}
 			}
 			
@@ -53,12 +65,16 @@ configure(allprojects) {
 				options {
 					links('http://docs.oracle.com/javase/7/docs/api/')
 				}
+				classpath += configurations.include
 				classpath += configurations.provided
 			}
 			
 			eclipse {
 				classpath {
-					plusConfigurations += [ configurations.provided ]
+					plusConfigurations += [
+						configurations.include,
+						configurations.provided
+					]
 				}
 			}
 			
@@ -75,7 +91,9 @@ configure(allprojects) {
 			if (jar.extension == 'rar') {
 				task includeDependencies(type: Copy) {
 					into "${sourceSets.main.output.resourcesDir}"
-					from configurations.compile + configurations.runtime
+					from configurations.compile +
+							configurations.runtime +
+							configurations.include
 				}
 				processResources.dependsOn includeDependencies
 			}
