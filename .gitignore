@@ -1,6 +1,10 @@
 bin/
 build/
+output-virtualbox-iso/
+packer_cache/
 .gradle/
 .settings/
+.vagrant/
+*.box
 .classpath
 .project
