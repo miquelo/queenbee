@@ -6,5 +6,6 @@ packer_cache/
 .settings/
 .vagrant/
 *.box
+.DS_Store
 .classpath
 .project

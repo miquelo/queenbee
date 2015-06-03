@@ -64,6 +64,7 @@
 				"scripts/networking.sh",
 				"scripts/sudoers.sh",
 				"scripts/vagrant.sh",
+				"scripts/docker.sh",
 				"scripts/vbaddguest.sh",
 				"scripts/cleanup.sh"
 			],
