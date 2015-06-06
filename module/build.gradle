@@ -62,9 +62,6 @@ configure(allprojects) {
 			}
 			
 			javadoc {
-				options {
-					links('http://docs.oracle.com/javase/7/docs/api/')
-				}
 				classpath += configurations.include
 				classpath += configurations.provided
 			}
@@ -110,6 +107,7 @@ task javadocs(type: Javadoc) {
 	destinationDir = new File("${buildDir}/docs/javadoc")
 	options {
 		overview = "${projectDir}/javadoc-overview.html"
+		links('http://docs.oracle.com/javase/7/docs/api/')
 	}
 }
 

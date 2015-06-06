@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  tasks:
+
+  - name: Stop 'caappserv' container #01
+    docker:
+      docker_url: http://docker-pool-01.lan:4243
+      image: queenbee/caappserv
+      name: caappserv-01
+      state: stopped

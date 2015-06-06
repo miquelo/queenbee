@@ -5,15 +5,18 @@
   
   - name: Build 'caappserv' image
     docker_image:
-      docker_url: http://localhost:4243
+      docker_url: http://docker-repo.lan:4243
       path: image/docker-caappserv
       name: queenbee/caappserv
       state: build
 
-  - name: Run 'caappserv' image
+  - name: Run 'caappserv' container #01
     docker:
-      docker_url: http://localhost:4243
+      docker_url: http://docker-pool-01.lan:4243
+      name: caappserv-01
       image: queenbee/caappserv
+      expose:
+      - "8080"
       ports:
       - "8080:8080"
       state: started

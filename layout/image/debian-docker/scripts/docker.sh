@@ -12,6 +12,6 @@ systemctl daemon-reload
 # Enable docker service
 systemctl enable docker
 
-# Non-root access
-# gpasswd -a ${USER} docker
+# Non-root access to vagrant
+gpasswd -a vagrant docker
 
