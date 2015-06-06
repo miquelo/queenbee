@@ -101,9 +101,16 @@ configure(allprojects) {
 	}
 }
 
+task clean << {
+	file("${buildDir}").deleteDir()
+}
+
 task javadocs(type: Javadoc) {
 	title = 'QueenBee API'
 	destinationDir = new File("${buildDir}/docs/javadoc")
+	options {
+		overview = "${projectDir}/javadoc-overview.html"
+	}
 }
 
 task wrapper(type: Wrapper) {

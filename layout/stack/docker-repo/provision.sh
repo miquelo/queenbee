@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "OK!!!" > /home/vagrant/provisioned.txt
+# Fix "stdin: is not a tty"
+sed -i "s/^mesg n$/tty -s \&\& mesg n/" ~/.profile

@@ -21,4 +21,4 @@ ADD ["glassfish-install.sh", "glassfish-install.sh"]
 RUN ["sh", "glassfish-install.sh"]
 RUN ["rm", "glassfish-install.sh"]
 
-ENTRYPOINT ["asadmin", "start-domain', "--verbose"]
+ENTRYPOINT ["asadmin", "start-domain", "--verbose"]
