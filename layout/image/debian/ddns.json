@@ -5,6 +5,7 @@
 	},
 	"builders": [
 		{
+			"name": "debian-docker",
 			"type": "virtualbox-iso",
 			"boot_command": [
 				"<esc><wait>",
@@ -49,7 +50,7 @@
 		{
 			"type": "vagrant",
 			"compression_level": "9",
-			"output": "debian-{{user `debian_version`}}-amd64-docker_{{.Provider}}.box",
+			"output": "debian-{{user `debian_version`}}-amd64-ddns_{{.Provider}}.box",
 			"only": ["virtualbox-iso"]
 		}
 	],
@@ -63,7 +64,7 @@
 				"script/networking.sh",
 				"script/sudoers.sh",
 				"script/vagrant.sh",
-				"script/docker.sh",
+				"script/ddns.sh",
 				"script/vbaddguest.sh",
 				"script/cleanup.sh"
 			],

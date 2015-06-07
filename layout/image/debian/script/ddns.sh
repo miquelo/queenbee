@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/bin/bash
 #
 # This file is part of QueenBee Project.
 #
@@ -15,19 +15,4 @@
 # You should have received a copy of the GNU General Public License
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
-
-VAGRANTFILE_API_VERSION = "2"
-
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-	config.vm.define "docker-repo", autostart: false do |instance|
-		instance.vm.hostname = "docker-repo"
-		instance.vm.box = "queenbee/debian-docker"
-		instance.vm.box_url = "file://../image/debian/debian-8.0.0-amd64-docker_virtualbox.box"
-		instance.vm.network "private_network", ip: "192.168.33.10"
-		instance.vm.network "forwarded_port", guest: 4243, host: 4243
-		instance.vm.network "forwarded_port", guest: 8080, host: 8080
-		instance.vm.synced_folder "docker-repo/vagrant", "/mnt/vagrant", create: true
-		instance.vm.provision "shell", path: "docker-repo/provision.sh"
-	end
-end
 
