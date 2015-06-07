@@ -5,7 +5,6 @@
 	},
 	"builders": [
 		{
-			"name": "debian-docker",
 			"type": "virtualbox-iso",
 			"boot_command": [
 				"<esc><wait>",
