@@ -18,4 +18,14 @@
 
 apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
 
+# http://andrwe.org/linux/own-ddns
+# https://wiki.debian.org/Bind9#Configuration
+
+# http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340
+
+a2dissite 000-default
+cp /tmp/ddns/site.conf /etc/apache2/sites-available/ddns.conf
+cp /tmp/ddns/*.php /var/www/ddns/
+a2ensite ddns
+
 rm -rf /tmp/ddns/
