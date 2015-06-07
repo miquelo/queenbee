@@ -3,7 +3,6 @@
 		"debian_version": "8.0.0",
 		"iso_checksum": "95b46c1c8cb3a02f7b65b5de5dd57d335424684e4b605c2786b168b4851bc17b0b6bf4a53ba22a701532d01883ff4de393ad896ed5595e6c8fd1652d0e3e5690"
 	},
-	
 	"builders": [
 		{
 			"type": "virtualbox-iso",
@@ -59,14 +58,14 @@
 			"type": "shell",
 			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
 			"scripts": [
-				"scripts/update.sh",
-				"scripts/sshd.sh",
-				"scripts/networking.sh",
-				"scripts/sudoers.sh",
-				"scripts/vagrant.sh",
-				"scripts/docker.sh",
-				"scripts/vbaddguest.sh",
-				"scripts/cleanup.sh"
+				"script/update.sh",
+				"script/sshd.sh",
+				"script/networking.sh",
+				"script/sudoers.sh",
+				"script/vagrant.sh",
+				"script/docker.sh",
+				"script/vbaddguest.sh",
+				"script/cleanup.sh"
 			],
 			"only": ["virtualbox-iso"]
 		}
