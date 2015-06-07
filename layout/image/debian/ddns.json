@@ -68,7 +68,7 @@
 		},
 		{
 			"type": "shell",
-			"execute_command": "mkdir /tmp/ddns",
+			"inline": "mkdir /tmp/ddns",
 			"only": ["virtualbox-iso"]
 		},
 		{
@@ -79,6 +79,7 @@
 		},
 		{
 			"type": "shell",
+			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
 			"scripts": [
 				"script/ddns.sh",
 				"script/vbaddguest.sh",
