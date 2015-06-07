@@ -16,6 +16,6 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
+# Fix "stdin: is not a tty"
+sed -i "s/^mesg n$/tty -s \&\& mesg n/" ~/.profile
 
-rm -rf /tmp/ddns/

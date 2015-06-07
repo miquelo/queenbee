@@ -62,7 +62,24 @@
 				"script/sshd.sh",
 				"script/networking.sh",
 				"script/sudoers.sh",
-				"script/vagrant.sh",
+				"script/vagrant.sh"
+			],
+			"only": ["virtualbox-iso"]
+		},
+		{
+			"type": "shell",
+			"execute_command": "mkdir /tmp/ddns",
+			"only": ["virtualbox-iso"]
+		}
+		{
+			"type": "file",
+			"source": "file/ddns/",
+			"destination": "/tmp/ddns/",
+			"only": ["virtualbox-iso"]
+		},
+		{
+			"type": "shell",
+			"scripts": [
 				"script/ddns.sh",
 				"script/vbaddguest.sh",
 				"script/cleanup.sh"
