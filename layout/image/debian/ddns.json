@@ -70,7 +70,7 @@
 			"type": "shell",
 			"execute_command": "mkdir /tmp/ddns",
 			"only": ["virtualbox-iso"]
-		}
+		},
 		{
 			"type": "file",
 			"source": "file/ddns/",
