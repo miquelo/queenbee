@@ -23,10 +23,13 @@ apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
 
 # http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340
 
+a2enmod php5 rewrite
 a2dissite 000-default
+
 cp /tmp/ddns/site.conf /etc/apache2/sites-available/ddns.conf
 mkdir /var/www/ddns
 cp /tmp/ddns/*.php /var/www/ddns/
 a2ensite ddns
 
 rm -rf /tmp/ddns/
+
