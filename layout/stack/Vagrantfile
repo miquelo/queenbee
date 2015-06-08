@@ -20,7 +20,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-	config.vm.define "dns", autostart: false do |instance|
+	config.vm.define "dns", autostart: true do |instance|
 		instance.vm.hostname = "dns"
 		instance.vm.box = "queenbee/debian-ddns"
 		instance.vm.box_url = "file://../image/debian/debian-8.1.0-amd64-ddns_virtualbox.box"

@@ -1,0 +1,45 @@
+//
+// This file is part of QueenBee Project.
+//
+// QueenBee Project is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// QueenBee Project is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+logging {
+	channel update_debug {
+		file "/var/log/update_debug.log" versions 3 size 100k;
+		severity debug;
+		print-severity  yes;
+		print-time      yes;
+	};
+	channel security_info {
+		file "/var/log/security_info.log" versions 1 size 100k;
+		severity info;
+		print-severity  yes;
+		print-time      yes;
+	};
+	channel bind_log {
+		file "/var/log/bind.log" versions 3 size 1m;
+		severity info;
+		print-category  yes;
+		print-severity  yes;
+		print-time      yes;
+	};
+	
+	category default { bind_log; };
+	category lame-servers { null; };
+	category update { update_debug; };
+	category update-security { update_debug; };
+	category security { security_info; };
+};
+
