@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.define "dns", autostart: false do |instance|
 		instance.vm.hostname = "dns"
 		instance.vm.box = "queenbee/debian-ddns"
-		instance.vm.box_url = "file://../image/debian/debian-8.0.0-amd64-ddns_virtualbox.box"
+		instance.vm.box_url = "file://../image/debian/debian-8.1.0-amd64-ddns_virtualbox.box"
 		instance.vm.network "private_network", ip: "192.168.33.10"
 		instance.vm.synced_folder "dns/vagrant", "/mnt/vagrant", create: true
 		instance.vm.provision "shell", path: "provision.sh"
@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.define "docker-repo", autostart: false do |instance|
 		instance.vm.hostname = "docker-repo"
 		instance.vm.box = "queenbee/debian-docker"
-		instance.vm.box_url = "file://../image/debian/debian-8.0.0-amd64-docker_virtualbox.box"
+		instance.vm.box_url = "file://../image/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", ip: "192.168.33.11"
 		instance.vm.synced_folder "docker-repo/vagrant", "/mnt/vagrant", create: true
 		instance.vm.provision "shell", path: "provision.sh"
