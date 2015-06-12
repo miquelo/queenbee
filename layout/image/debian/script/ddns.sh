@@ -20,13 +20,16 @@ apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
 
 # http://andrwe.org/linux/own-ddns
 # https://wiki.debian.org/Bind9#Configuration
-# Use /etc/init.d/bind9 status to known what happens!!!
+# Use "service bind status" to known what happens!!!
 
 # dnssec-keygen -a HMAC-MD5 -b 512 -n USER ns-queenbee-lan_rndc-key
 # Not possible. Not enough entropy :(
-mv /etc/bind/rndc.key /etc/bind/ns-queenbee-lan_rndc.key
+cp /etc/bind/rndc.key /etc/bind/ns-queenbee-lan_rndc.key
 cp -f /tmp/ddns/bind/named.* /etc/bind/
 cp /tmp/ddns/bind/db.queenbee.* /var/lib/bind/
+
+mkdir -p /var/log/bind
+chown bind /var/log/bind
 
 # http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340
 
