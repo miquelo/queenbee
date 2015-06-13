@@ -1,4 +1,4 @@
-@		IN		SOA		sid.queenbee.lan. root.queenbee.lan. (
+@		IN		SOA		ddns.queenbee.lan. root.queenbee.lan. (
 	2007010401	; Serial
 	3600		; Refresh [1h]
 	600			; Retry   [10m]
@@ -6,7 +6,7 @@
 	600			; Negative Cache TTL [1h]
 );
 
-@		IN		NS		sid.queenbee.lan.
+@		IN		NS		ddns.queenbee.lan.
 
-2		IN		PTR		sid.queenbee.lan.
+2		IN		PTR		ddns.queenbee.lan.
 
