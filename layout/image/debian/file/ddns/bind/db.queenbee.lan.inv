@@ -9,6 +9,4 @@
 @		IN		NS		sid.queenbee.lan.
 
 2		IN		PTR		sid.queenbee.lan.
-10 		IN		PTR		queenbee.lan.
-11		IN		PTR		docker-repo.queenbee.lan.
 

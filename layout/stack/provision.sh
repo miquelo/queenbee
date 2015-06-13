@@ -16,6 +16,8 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+echo -e "nameserver 192.168.33.2\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
+
 # Fix "stdin: is not a tty"
 sed -i "s/^mesg n$/tty -s \&\& mesg n/" ~/.profile
 

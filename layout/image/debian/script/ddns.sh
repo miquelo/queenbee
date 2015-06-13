@@ -18,10 +18,6 @@
 
 apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
 
-# http://andrwe.org/linux/own-ddns
-# https://wiki.debian.org/Bind9#Configuration
-# Use "service bind status" to known what happens!!!
-
 # dnssec-keygen -a HMAC-MD5 -b 512 -n USER ns-queenbee-lan_rndc-key
 # Not possible. Not enough entropy :(
 cp /etc/bind/rndc.key /etc/bind/ns-queenbee-lan_rndc.key
@@ -31,8 +27,6 @@ cp /tmp/ddns/bind/db.queenbee.* /var/lib/bind/
 mkdir -p /var/log/bind
 chown bind /var/log/bind
 
-# http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340
-
 a2enmod php5 rewrite
 a2dissite 000-default
 
@@ -40,6 +34,8 @@ cp /tmp/ddns/web/site.conf /etc/apache2/sites-available/ddns.conf
 mkdir /var/www/ddns
 cp /tmp/ddns/web/*.php /var/www/ddns/
 a2ensite ddns
+
+usermod -a -G bind www-data
 
 rm -rf /tmp/ddns/
 

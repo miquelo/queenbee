@@ -16,4 +16,18 @@
   along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
  
 -->
-<?php ?>
+<?php
+$name = $_POST['name'];
+$ip = escapeshellcmd($_SERVER['REMOTE_ADDR']);
+
+$data = "<< EOF
+server localhost
+zone queenbee.lan
+update delete $name.queenbee.lan A
+update add $name.queenbee.lan 300 A $ip
+send
+EOF";
+exec("/usr/bin/nsupdate -k /etc/bind/ns-queenbee-lan_rndc.key $data", $cmdout, $ret);
+header('Location: /');
+?>
+

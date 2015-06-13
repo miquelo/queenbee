@@ -27,12 +27,12 @@ include "/etc/bind/named.conf.log";
 zone "queenbee.lan" {
 	type master;
 	file "/var/lib/bind/db.queenbee.lan";
-	allow-update { key ns-queenbee-lan_rndc.key; };
+	allow-update { key rndc-key; };
 };
 zone "33.168.192.in-addr.arpa" {
 	type master;
 	file "/var/lib/bind/db.queenbee.lan.inv";
-	allow-update { key ns-queenbee-lan_rndc.key; };
+	allow-update { key rndc-key; };
 };
 
 // Consider adding the 1918 zones here, if they are not used in your
