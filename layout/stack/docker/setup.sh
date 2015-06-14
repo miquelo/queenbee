@@ -19,13 +19,13 @@
 # Docker repository init script 
 echo -e "#!/bin/bash
 ### BEGIN INIT INFO
-# Provides:				docker-repo
+# Provides:				docker-registry
 # Required-Start:		\$local_fs \$network
 # Required-Stop:		\$local_fs
 # Default-Start:		2 3 4 5
 # Default-Stop:			0 1 6
-# Short-Description:	Docker Repository
-# Description:			Repository for Docker images
+# Short-Description:	Docker Registry
+# Description:			Registry for Docker images
 ### END INIT INFO
 
 case \"\$1\" in
@@ -33,13 +33,13 @@ case \"\$1\" in
 	docker run -d -p 5000:5000 --restart=always --name registry registry
 	;;
 	stop)
-	docker stop --name registry
+	docker stop registry
 	;;
 esac
-" > /etc/init.d/docker-repo
-chmod 755 /etc/init.d/docker-repo
-update-rc.d docker-repo defaults
+" > /etc/init.d/docker-registry
+chmod 755 /etc/init.d/docker-registry
+update-rc.d docker-registry defaults
 
 # Running Docker repository at provision time
-/etc/init.d/docker-repo start
+/etc/init.d/docker-registry start
 
