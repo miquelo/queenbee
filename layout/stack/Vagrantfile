@@ -50,6 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-docker"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", type: "dhcp"
+		instance.vm.provision "shell", path: "executor/setup.sh"
 	end
 	
 end
