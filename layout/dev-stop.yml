@@ -22,7 +22,7 @@
 
   - name: Stop 'caappserv' container #01
     docker:
-      docker_url: http://docker.queenbee.lan:4243
+      docker_url: http://executor01.queenbee.lan:4243
       image: queenbee/caappserv
       name: caappserv-01
       state: stopped
