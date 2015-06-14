@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-ddns"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-ddns_virtualbox.box"
 		instance.vm.network "private_network", ip: DDNS_IP
-		instance.vm.provision "shell", path: "setup-ddns.sh"
+		instance.vm.provision "shell", path: "ddns/setup.sh"
 	end
 	
 	config.vm.define "docker", autostart: true do |instance|
@@ -42,7 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-docker"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", type: "dhcp"
-		instance.vm.provision "shell", path: "setup-docker.sh"
+		instance.vm.provision "shell", path: "docker/setup.sh"
 	end
 	
 end
