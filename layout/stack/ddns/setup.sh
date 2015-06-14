@@ -16,6 +16,10 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ddns_ip = $1
-echo -e "nameserver $ddns_ip\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
+mv -f /tmp/ddns/named.conf.local /etc/bind/named.conf.local
+mv -f /tmp/ddns/bind/db.* /var/lib/bind/
+
+service bind9 restart
+
+rm -rf /tmp/ddns/
 

@@ -24,10 +24,9 @@ DDNS_IP = "192.168.53.2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	config.vm.provision "shell" do |s|
-		s.path = "update_resolv.sh"
+		s.path = "setup.sh"
 		s.args = [DDNS_IP]
 	end
-	config.vm.provision "shell", inline: "sed -i \"s/^mesg n$/tty -s \&\& mesg n/\" ~/.profile"
 	config.vm.synced_folder "vagrant", "/vagrant", create: true
 	
 	config.vm.define "ddns", autostart: true do |instance|
@@ -35,10 +34,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-ddns"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-ddns_virtualbox.box"
 		instance.vm.network "private_network", ip: DDNS_IP
-		instance.vm.provision "file", source: "ddns/named.conf.local", destination: "/etc/bind/named.conf.local"
-		instance.vm.provision "file", source: "ddns/db.queenbee.lan", destination: "/var/lib/bind/db.queenbee.lan"
-		instance.vm.provision "file", source: "ddns/db.queenbee.lan.inv", destination: "/var/lib/bind/db.queenbee.lan.inv"
-		instance.vm.provision "shell", inline: "service bind9 restart"
+		instance.vm.provision "shell", inline: "mkdir /tmp/ddns && chown vagrant /tmp/ddns"
+		instance.vm.provision "file", source: "ddns/named.conf.local", destination: "/tmp/ddns/named.conf.local"
+		instance.vm.provision "file", source: "ddns/db.queenbee.lan", destination: "/tmp/ddns/bind/db.queenbee.lan"
+		instance.vm.provision "file", source: "ddns/db.queenbee.lan.inv", destination: "/tmp/ddns/bind/db.queenbee.lan.inv"
+		instance.vm.provision "shell", path: "ddns/setup.sh"
 	end
 	
 	config.vm.define "docker", autostart: true do |instance|
@@ -46,7 +46,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-docker"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", type: "dhcp"
-		instance.vm.provision "shell", path: "docker/install-repo.sh"
+		instance.vm.provision "shell", path: "docker/setup.sh"
 	end
 	
 end

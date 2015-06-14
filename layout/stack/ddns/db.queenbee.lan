@@ -10,7 +10,7 @@ $TTL	3600
 @				IN		NS		ddns.queenbee.lan.
 @				IN		MX		2 ddns.queenbee.lan.
 
-ddns			IN		A		192.168.33.2
+ddns			IN		A		192.168.53.2
 
 pop				IN		CNAME	ddns
 www				IN		CNAME	ddns
