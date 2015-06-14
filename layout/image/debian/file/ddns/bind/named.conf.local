@@ -15,27 +15,3 @@
 // along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-// Manage the file logs
-include "/etc/bind/named.conf.log";
-
-// Domain Management queenbee.lan
-// ------------------------------
-//  - The server is defined as the master on the domain.
-//  - There are no forwarders for this domain.
-//  - Entries in the domain can be added dynamically 
-//    with the key ns-queenbee-lan_rndc.key
-zone "queenbee.lan" {
-	type master;
-	file "/var/lib/bind/db.queenbee.lan";
-	allow-update { key rndc-key; };
-};
-zone "33.168.192.in-addr.arpa" {
-	type master;
-	file "/var/lib/bind/db.queenbee.lan.inv";
-	allow-update { key rndc-key; };
-};
-
-// Consider adding the 1918 zones here, if they are not used in your
-// organization
-include "/etc/bind/zones.rfc1918";
-

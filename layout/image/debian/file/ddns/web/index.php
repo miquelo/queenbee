@@ -14,7 +14,7 @@
  
   You should have received a copy of the GNU General Public License
   along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
- 
+  
 -->
 <!DOCTYPE html>
 <html>
@@ -24,13 +24,15 @@
 	<body>
 		<h1>Dynamic DNS</h1>
 		<p>
-			Create or update a subdomain to name to the caller IP address.
+			Update a domain with the caller IP address.
 		<p>
-		<form action="/subdomain" method="post">
+		<form action="/update" method="post">
 			<fieldset>
-				<label>Subdomain Name</label>
-				<input type="text" name="name" placeholder="subdomain.name"/>
-				<input type="submit" value="Submit"/>
+				<label for="zoneField">Zone</label>
+				<input id="zoneField" type="text" name="zone" placeholder="domain.name"/>
+				<label for="sdNameField">Subdomain name</label>
+				<input if="sdNameField" type="text" name="sdname" placeholder="subdomain.name"/>
+				<input type="submit" value="Update"/>
 			</fieldset>
 		</form>
 	</body>

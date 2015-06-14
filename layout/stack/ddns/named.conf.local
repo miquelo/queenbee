@@ -15,23 +15,14 @@
 // along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-// Managing acls
-acl internals { 127.0.0.0/8; 192.168.0.0/16; };
-
-include "/etc/bind/named.conf.options";
-
-// TSIG key used for the dynamic update
-include "/etc/bind/ns-ddns_rndc.key";
-
-// Configure the communication channel for Administrative BIND9 with rndc
-// By default, they key is in the rndc.key file and is used by rndc and bind9 
-// on the localhost
-controls {
-	inet 127.0.0.1 port 953 allow { 127.0.0.1; };
+zone "queenbee.lan" {
+	type master;
+	file "/var/lib/bind/db.queenbee.lan";
+	allow-update { key rndc-key; };
 };
-
-include "/etc/bind/named.conf.log";
-include "/etc/bind/named.conf.local";
-include "/etc/bind/named.conf.default-zones";
-include "/etc/bind/zones.rfc1918";
+zone "53.168.192.in-addr.arpa" {
+	type master;
+	file "/var/lib/bind/db.queenbee.lan.inv";
+	allow-update { key rndc-key; };
+};
 

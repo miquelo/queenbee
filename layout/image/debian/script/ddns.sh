@@ -18,11 +18,10 @@
 
 apt-get install -y bind9 dnsutils apache2 php5-common libapache2-mod-php5
 
-# dnssec-keygen -a HMAC-MD5 -b 512 -n USER ns-queenbee-lan_rndc-key
+# dnssec-keygen -a HMAC-MD5 -b 512 -n USER ns-ddns_rndc-key
 # Not possible. Not enough entropy :(
-cp /etc/bind/rndc.key /etc/bind/ns-queenbee-lan_rndc.key
+cp /etc/bind/rndc.key /etc/bind/ns-ddns_rndc.key
 cp -f /tmp/ddns/bind/named.* /etc/bind/
-cp /tmp/ddns/bind/db.queenbee.* /var/lib/bind/
 
 mkdir -p /var/log/bind
 chown bind /var/log/bind

@@ -16,9 +16,6 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# DDNS is the primary DNS server
-echo -e "nameserver 192.168.33.2\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
-
-# Fix "stdin: is not a tty" (For the second and subsequent provision times)
-sed -i "s/^mesg n$/tty -s \&\& mesg n/" ~/.profile
+ddns_ip = $1
+echo -e "nameserver $ddns_ip\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
 
