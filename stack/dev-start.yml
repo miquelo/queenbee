@@ -23,7 +23,7 @@
   - name: Build 'caappserv' image
     docker_image:
       docker_url: http://docker.queenbee.lan:4243
-      path: layout/image/docker/caappserv
+      path: ../image/docker/caappserv
       name: queenbee/caappserv
       state: build
 
