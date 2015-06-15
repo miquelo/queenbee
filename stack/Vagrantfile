@@ -24,7 +24,7 @@ DDNS_IP = "192.168.53.2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	config.vm.provision "shell" do |s|
-		s.path = "setup.sh"
+		s.path = "roles/common/files/devel/setup.sh"
 		s.args = [DDNS_IP]
 	end
 	config.vm.synced_folder "vagrant", "/vagrant", create: true
@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-ddns"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-ddns_virtualbox.box"
 		instance.vm.network "private_network", ip: DDNS_IP
-		instance.vm.provision "shell", path: "ddns/setup.sh"
+		instance.vm.provision "shell", path: "roles/ddns/files/devel/setup.sh"
 	end
 	
 	config.vm.define "docker", autostart: true do |instance|
@@ -42,7 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-docker"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", type: "dhcp"
-		instance.vm.provision "shell", path: "docker/setup.sh"
+		instance.vm.provision "shell", path: "roles/docker/files/devel/setup.sh"
 	end
 	
 	config.vm.define "executor01", autostart: false do |instance|
@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		instance.vm.box = "queenbee/debian-docker"
 		instance.vm.box_url = "#{IMAGE_BASE_URL}/debian/debian-8.1.0-amd64-docker_virtualbox.box"
 		instance.vm.network "private_network", type: "dhcp"
-		instance.vm.provision "shell", path: "executor/setup.sh"
+		instance.vm.provision "shell", path: "roles/executor/files/devel/setup.sh"
 	end
 	
 end

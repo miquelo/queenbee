@@ -15,8 +15,33 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-localhost
+---
 
-ddns.queenbee.lan
-docker.queenbee.lan
-executor01.queenbee.lan
+- hosts: localhost
+  tasks:
+  
+  - name: Build 'caappserv' image
+    docker_image:
+      docker_url: http://docker.queenbee.lan:4243
+      path: ../image/docker/caappserv
+      name: queenbee/caappserv
+      state: build
+
+  - name: Run 'caappserv' container #01
+    docker:
+      docker_url: http://executor01.queenbee.lan:4243
+      name: caappserv-01
+      image: docker.queenbee.lan:5000/queenbee/caappserv
+      expose:
+      - "8080"
+      ports:
+      - "8080:8080"
+      state: started
+      
+  - name: Stop 'caappserv' container #01
+    docker:
+      docker_url: http://executor01.queenbee.lan:4243
+      image: queenbee/caappserv
+      name: caappserv-01
+      state: stopped
+
