@@ -19,7 +19,7 @@
 # mv -f /tmp/ddns/named.conf.local /etc/bind/named.conf.local
 # mv -f /tmp/ddns/bind/db.* /var/lib/bind/
 
-echo -e "zone \"queenbee.lan\" {
+echo "zone \"queenbee.lan\" {
 	type master;
 	file \"/var/lib/bind/db.queenbee.lan\";
 	allow-update { key rndc-key; };
@@ -31,7 +31,7 @@ zone \"53.168.192.in-addr.arpa\" {
 };
 " > /etc/bind/named.conf.local
 
-echo -e "\$TTL	3600
+echo "\$TTL	3600
 @				IN		SOA		ddns.queenbee.lan. root.queenbee.lan. (
 	2007010401	; Serial
 	3600		; Refresh [1h]
@@ -50,7 +50,7 @@ www				IN		CNAME	ddns
 mail			IN		CNAME	ddns
 " > /var/lib/bind/db.queenbee.lan
 
-echo -e "@		IN		SOA		ddns.queenbee.lan. root.queenbee.lan. (
+echo "@		IN		SOA		ddns.queenbee.lan. root.queenbee.lan. (
 	2007010401	; Serial
 	3600		; Refresh [1h]
 	600			; Retry   [10m]

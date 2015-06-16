@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # This file is part of QueenBee Project.
 #
@@ -16,30 +15,22 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Docker repository init script 
-echo -e "#!/bin/bash
-### BEGIN INIT INFO
-# Provides:				docker-registry
-# Required-Start:		\$local_fs \$network
-# Required-Stop:		\$local_fs
-# Default-Start:		2 3 4 5
-# Default-Stop:			0 1 6
-# Short-Description:	Docker Registry
-# Description:			Registry for Docker images
-### END INIT INFO
+---
 
-case \"\$1\" in
-	start)
-	docker run -d -p 5000:5000 --restart=always --name registry registry
-	;;
-	stop)
-	docker stop registry
-	;;
-esac
-" > /etc/init.d/docker-registry
-chmod 755 /etc/init.d/docker-registry
-update-rc.d docker-registry defaults
-
-# Running Docker repository at provision time
-/etc/init.d/docker-registry start
+- hosts: all
+  sudo: true
+  
+  tasks:
+  
+    - name: Update DDNS nameserver
+      shell: sudo echo -e "nameserver $1\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
+    
+    - name: Update DDNS IP address (Copy script)
+      copy: src=../../files/local/update-ddns.sh dest=/tmp/update-ddns.sh 
+    
+    - name: Update DDNS IP address
+      shell: sh /tmp/update-ddns.sh; rm /tmp/update-ddns.sh
+      
+    - name: Fix "stdin", for the second and subsequent times
+      shell: sed -i "s/^mesg n$/tty -s \&\& mesg n/" ~/.profile
 
