@@ -16,8 +16,7 @@
 # along with QueenBee Project.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Registry docker.queenbee.lan:5000 must be available
-# https://github.com/docker/distribution/blob/master/docs/deploying.md#making-your-registry-available
+sed -i 's/^DOCKER_OPTS="\(.*\)"$/DOCKER_OPTS="\1 --insecure-registry docker.queenbee.lan:5000"/' /etc/default/docker
 
 service docker restart
 
